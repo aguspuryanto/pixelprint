@@ -1,0 +1,92 @@
+<header ng-include="'pages/header.html'"></header>
+	
+	<div class="container">
+	  <div class="starter-template">
+		
+		<div class="panel panel-default">
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">My Users</h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<form ng-submit="newUser(user)" role="form">
+					<div class="form-group col-md-3">
+						<label>Nama</label>
+						<input type="text" ng-model="user.display_name" class="form-control">
+					</div>
+					<div class="form-group col-md-3">
+						<label>Email address:</label>
+						<input type="email" ng-model="user.email" class="form-control">
+					</div>
+					<div class="form-group col-md-3">
+						<label>Password:</label>
+						<input type="password" ng-model="user.password" class="form-control">
+					</div>
+					<div class="form-group col-md-3">
+						<label>Level</label>
+						<div id="myUsers" class="input-group">
+							<select ng-model="user.level" class="form-control">
+								<option value="10">Administrator</option>
+								<!-- <option value="9">Administrator</option>
+								<option value="8">Administrator</option> -->
+								<option value="0">Operator</option>
+							</select>
+							<span class="input-group-btn">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</span>
+						</div>
+					</div>
+						
+					<!-- <div class="col-md-12 text-right">
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div> -->
+				</form>
+				
+			</div>
+			
+			<hr>
+			<div class="table-responsive" style="margin-top:30px;">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th width="1%">#</th>
+						<th>Nama</th>
+						<th>Email</th>
+						<th>Level</th>
+						<th width="18%">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="usr in listUsers">
+						<th scope="row">{{$index + 1}}.</th>
+						<td>{{usr.name}}</td>
+						<td>{{usr.email}}</td>
+						<td>{{usr.level}}</td>
+						<td class="text-center">
+							<div class="btn-group" role="group">
+								<button type="button" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i> Edit</button>
+								<button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</div>
+		</div>
+		
+	  </div>
+	</div>
+	
+<!-- tambah data -->
+<script type="text/ng-template" id="showTabelKemungkinan.html" >
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close"  ng-click="cancel()"><span aria-hidden="1">&times;</span><span class="sr-only">Keluar</span></button>
+        <h3 class="modal-title" id="myModalLabel">New Order</h3>
+    </div>
+    <div class="modal-body">
+		
+    </div>
+    <div class="modal-footer" style="margin-top:0px"></div>
+</div>
+</script>

@@ -1,0 +1,44 @@
+<header ng-include="'pages/header.html'"></header>
+	
+	<div class="container">
+	  <div class="starter-template">
+	  
+		<div class="panel panel-default">
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">My Customer</h3>
+		</div>
+		<div class="panel-body">			
+			<div class="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th width="1%">#</th>
+						<th>Nama</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="cust in listCustomers">
+						<th scope="row">{{$index + 1}}.</th>
+						<td>{{cust.namacustomer}}</td>
+					</tr>
+				</tbody>
+			</table>
+			</div>
+		</div>
+		
+	  </div>
+	</div>
+	
+<!-- tambah data -->
+<script type="text/ng-template" id="showTabelKemungkinan.html" >
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close"  ng-click="cancel()"><span aria-hidden="1">&times;</span><span class="sr-only">Keluar</span></button>
+        <h3 class="modal-title" id="myModalLabel">New Order</h3>
+    </div>
+    <div class="modal-body">
+		
+    </div>
+    <div class="modal-footer" style="margin-top:0px"></div>
+</div>
+</script>

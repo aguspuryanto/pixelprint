@@ -1,0 +1,59 @@
+<header ng-include="'pages/header.html'"></header>
+	
+	<div class="container">
+	  <div class="starter-template">
+	  
+		<div class="panel panel-default">
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">My Order : <b>{{userName}}</b></h3>
+		</div>
+		<div class="panel-body">			
+			<div class="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Tgl</th>
+						<th>Nama</th>
+						<th>No SO</th>
+						<th>Item</th>
+						<th>Jml</th>
+						<th>Deadline</th>
+						<th>Keterangan</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-class="{'warning': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3,
+             'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrders|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
+					<!-- <tr ng-repeat="order in listOrder"> -->
+						<th scope="row">{{order.orderdate}}</th>
+						<td>{{order.namapelanggan}}</td>
+						<td>{{order.nomorso}}</td>
+						<td>{{order.orderitem}}</td>
+						<td>{{order.orderjml}}</td>
+						<td>{{formatDate(order.orderdeadline) | date:"yyyy-mm-dd"}} <div class="pull-right"><span class="label label-default">* {{dtime(order.orderdeadline)}} x 24Jam</span></div></td>
+						<td>{{order.orderketerangan}}</td>
+						<th scope="row">{{order.orderstatus}}</th>
+					</tr>
+				</tbody>
+			</table>
+			<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+			</div>
+		</div>
+		
+	  </div>
+	</div>
+	
+<!-- tambah data -->
+<script type="text/ng-template" id="showTabelKemungkinan.html" >
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close"  ng-click="cancel()"><span aria-hidden="1">&times;</span><span class="sr-only">Keluar</span></button>
+        <h3 class="modal-title" id="myModalLabel">New Order</h3>
+    </div>
+    <div class="modal-body">
+		
+    </div>
+    <div class="modal-footer" style="margin-top:0px"></div>
+</div>
+</script>

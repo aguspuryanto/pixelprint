@@ -1,0 +1,22 @@
+
+
+	  <form name="formLogin" ng-submit="submitForm()" class="form-signin">
+		<img class="img-responsive" src="LOGO-PIXEL-BARU-kecil2.jpg">
+        <div class="text-center">
+			<h2 class="form-signin-heading">Please sign in</h2>
+		</div>
+		<div class="alert alert-danger" role="alert" ng-show="alertMsg">{{alertMsg}}</div>
+        <label class="sr-only">Email address</label>
+        <input type="email" ng-model="login.inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <span ng-show="login.inputEmail.$dirty && login.inputEmail.$error.required" class="help-block">Email address is required</span>
+		
+		<label class="sr-only">Password</label>
+        <input type="password" ng-model="login.inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="login.rememberMe" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+      </form>

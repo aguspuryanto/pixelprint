@@ -1,0 +1,93 @@
+body {
+  padding-top: 50px;
+}
+
+.navbar-brand { padding: 3px 15px; }
+.navbar-brand img {
+    display:block;
+	height:50px;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.starter-template {
+  padding: 40px 0px;
+  /* text-align: center; */
+}
+
+.panel-heading h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: normal;
+    /* width: 75%;
+    padding-top: 8px; */
+}
+
+.panel-body {
+	/* padding:0px;
+	margin:0px; */
+}
+
+.panel-body table { margin-bottom:0px; }
+
+#dashb .input-group-btn .btn {
+	padding: 9px 12px;
+}
+
+/* td span.label-default { margin-top: 5px; }
+
+tr.success { background-color: #33FF66 !important; }
+tr.yellow { background-color: #FFFF66 !important; }
+tr.warning { background-color: #FF9900 !important; }
+tr.danger { background-color: #FF3300 !important; }
+tr.dark-red { background-color: #CC0000 !important; } */
+
+@media (max-width: 767px) {
+    .container {
+      padding:0;
+      margin:0;
+    }
+	
+	body {
+      padding-top:10px;
+    }
+	
+	.navbar  .container {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
