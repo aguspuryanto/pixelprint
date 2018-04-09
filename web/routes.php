@@ -64,34 +64,49 @@ $app->post('/addOrder[/]', function ($request, $response, $args) {
 	// echo json_encode($paramData);
 	
 	$dataCustomer = array(
-		'namacustomer' => $paramData['nama']
+		'namacustomer' => $paramData['nama'],
+		'hp' => $paramData['mobile'],
+		'email' => $paramData['email'],
+		'alamat' => $paramData['alamat']
 	);
 	
-	$count = DB::table('wp0e_pxmycustomer')->where('namacustomer', $paramData['nama'])->count();
+	$count = DB::table('wp0e_pxmycustomer')
+		->where('email', $paramData['email'])
+		->where('hp', $paramData['hp'])
+		->count();
 	if($count == 0){
 		$insertCustomer = DB::table('wp0e_pxmycustomer')->insert($dataCustomer);
 	}
 	
-	$pxmyorder = DB::table('wp0e_pxmyorder')
-		->where('nomorso', $paramData['noso'])
-		->where('orderitem', $paramData['item'])
-		->get();
-	// echo $count;
+	/* $getnomorso = DB::table('wp0e_pxmyorder')
+		->select('nomorso')->where('nomorso', $paramData['noso'])
+		->get(); */
 	
-	if(count($pxmyorder) <= 0){
+	$pxmyorder = DB::table('wp0e_pxmyorder')
+		->where('namapelanggan', $paramData['nama'])
+		->where('orderitem', $paramData['item'])
+		->count();
+	// echo $count;	
+	
+	if($pxmyorder == 0){
 		
-		$orderdeadline = $paramData['ddline'] . " " . date("H:i:s");
-		$orderdate = $paramData['tglorder'] . " " . date("H:i:s");
+		$ddtime = date("H:i:s", strtotime($paramData['ddtime']));
+		$orderdeadline = $paramData['ddline'];
+		// $orderdate = $paramData['tglorder'] . " " . date("H:i:s");
+	
+		$number = DB::table('wp0e_pxmyorder')->count()+1;
+		$nomorso = str_pad($number, 9, "0", STR_PAD_LEFT);  //00002
 		
 		$dataOrder = array(
-			'nomorso' => $paramData['noso'],
+			// 'nomorso' => $nomorso,
 			'namapelanggan' => $paramData['nama'],
 			'orderitem' => $paramData['item'],
 			'orderjml' => $paramData['jml'],
 			'orderketerangan' => $paramData['ket'],
 			'orderdeadline' => date("Y-m-d H:i:s", strtotime($orderdeadline)),
-			'orderdate' => date("Y-m-d H:i:s", strtotime($orderdate)),
-			'orderstatus' => 'Design'
+			'orderdate' => date("Y-m-d H:i:s"),
+			'orderstatus' => 'Design',
+			'orderopr' => $paramData['opr']
 		);	
 		$insertOrder = DB::table('wp0e_pxmyorder')->insert($dataOrder);
 	}
@@ -112,15 +127,76 @@ $app->post('/addOrder[/]', function ($request, $response, $args) {
         ->write(json_encode($result));
 });
 
+$app->post('/updtOrder[/]', function ($request, $response, $args) {
+
+	$paramData = $request->getParsedBody();
+	// return $response->withJson($paramData);
+	$updateOrder = DB::table("wp0e_pxmyorder")
+		->where('orderid', $paramData['orderid'])
+		->update(['nomorso' => $paramData['nomorso']]);
+		
+	$insertLogger = DB::table('wp0e_pxlog')->insert(array(
+		'orderid' => $paramData['orderid'],
+		'update' => date("Y-m-d H:i:s"),
+		'operator' => $paramData['user_id'],
+		'ket' => 'New StatusOrder : '.$paramData['nomorso'],
+	));
+		
+	if(!$updateOrder){
+		$result["error"] = true;
+        $result["msg"] = "Gagal simpan data";
+	}else{
+		$result["error"] = false;
+        $result["msg"] = "Data Tersimpan";
+	}
+	
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($result));
+});
+
+$app->post('/updtOrderStatus[/]', function ($request, $response, $args) {
+
+	$paramData = $request->getParsedBody();
+	// return $response->withJson($paramData);
+	
+	$updateOrder = DB::table("wp0e_pxmyorder")
+		->where('orderid', $paramData['orderid'])
+		->update(['orderstatus' => $paramData['orderstatus']]);
+		
+	$insertLogger = DB::table('wp0e_pxlog')->insert(array(
+		'orderid' => $paramData['orderid'],
+		'update' => date("Y-m-d H:i:s"),
+		'operator' => $paramData['user_id'],
+		'ket' => 'New StatusOrder : '.$paramData['orderstatus'],
+	));
+		
+	if(!$updateOrder){
+		$result["error"] = true;
+        $result["msg"] = "Gagal simpan data";
+	}else{
+		$result["error"] = false;
+        $result["msg"] = "Data Tersimpan";
+	}
+	
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($result));
+});
+
 $app->post('/listOrder[/]', function ($request, $response, $args) {
 	
 	$paramData = $request->getParsedBody();
 	// return $response->withJson($paramData); die();
 	
 	$result = DB::table("wp0e_pxmyorder");		
-	if($paramData['user_id']>1){
+	/* if($paramData['user_id']>1 && $paramData['user_level']!=3){
 		$result = $result->where('orderopr', $paramData['user_id']);
-	}	
+	} */	
+	
+	if($paramData['params']){
+		$result = $result->where('orderstatus', ucwords($paramData['params']));
+	}
 	$result = $result->orderBy('orderid', 'DESC')->get();
 	// return $response->withJson( toDebug($result) );
 	
@@ -158,6 +234,26 @@ $app->get('/listCustomers[/]', function ($request, $response, $args) {
 	return $response->withStatus(200)
         ->withHeader('Content-Type', 'application/json')
         ->write($result);
+});
+
+$app->post('/listHistory[/]', function ($request, $response, $args) {
+	
+	$paramData = $request->getParsedBody();
+	// return $response->withJson($paramData); die();
+	
+	$qry = "select a.*,b.nomorso,c.name from wp0e_pxlog a
+		left join wp0e_pxmyorder b on b.orderid = a.orderid
+		left join wp0e_pxusers c on c.id = a.operator";
+		
+	if($paramData['orderid']){
+		$qry .= " where a.orderid ='".$paramData['orderid']."'";
+	}		
+	$qry .= " order by a.id desc";
+	
+	$result = DB::select(DB::raw($qry));	
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($result));
 });
 
 

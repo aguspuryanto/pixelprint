@@ -11,15 +11,17 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#/dashboard">myDashboard</a></li>
-            <li ng-hide="userId!=1"><a href="#/myusers">myUsers</a></li>
-            <li><a href="#/myorder">myOrder</a></li>
-            <li ng-hide="userId!=1"><a href="#/mycustomer">myCustomer</a></li>
+            <li><a href="#/dashboard">my Dashboard</a></li>
+            <li ng-hide="userLevel!=10"><a href="#/myusers">my Users</a></li>
+            <li ng-hide="userLevel==3"><a href="#/myorder">my Order</a></li>
+            <li ng-hide="userLevel!=10"><a href="#/mycustomer">my Customer</a></li>
+            <li ng-hide="userLevel!=10"><a href="#/myhistory">my History</a></li>
           </ul>
 		  
 		  <ul class="nav navbar-nav navbar-right">
+			<li class="active"><a href >{{userName}} ({{userLevel}})</a></li>
 			<li>
-				<a href data-toggle="modal" data-target="#exampleModal">
+				<a href="#/logout" data-toggle="modal" data-target="#">
 					<i class="glyphicon glyphicon-log-out"></i>Logout
 				</a>
 			</li>

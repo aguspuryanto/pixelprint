@@ -1,0 +1,70 @@
+<header ng-include="'pages/header.html'"></header>
+	
+	<div class="container">
+	  <div class="starter-template">
+	  
+		<div class="panel panel-default">
+		<div class="panel-heading clearfix">
+			<h3 class="panel-title pull-left">My Order : <b>{{userName}}</b></h3>
+		</div>
+		<div class="panel-body" ng-init="loadOrder()">			
+			<div class="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Tgl</th>
+						<th>No Sales Order</th>
+						<th>Nama Pelanggan</th>
+						<th>Item</th>
+						<th>Jml</th>
+						<th>Deadline</th>
+						<th>Keterangan</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-class="{'warning': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3,
+             'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrders|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
+					<!-- <tr ng-repeat="order in listOrder"> -->
+						<th scope="row">{{order.orderdate}}</th>
+						<td>
+							<span ng-show="order.nomorso==0" editable-text="order.nomorso" onaftersave="renameNomerSO(order)">{{order.nomorso || '0' }} </span>
+							<span ng-hide="order.nomorso==0">{{order.nomorso || '0' }} </span>
+						</td>
+						<td>{{order.namapelanggan}}</td>
+						<td>{{order.orderitem}}</td>
+						<td>{{order.orderjml}}</td>
+						<td>{{formatDate(order.orderdeadline) | date:"yyyy-MM-dd"}}</td>
+						<td>{{order.orderketerangan}}</td>
+						<th scope="row" class="text-center">
+							<span ng-show="order.nomorso==0">{{order.orderstatus}}</span>
+							<div ng-hide="order.nomorso==0" class="input-group">
+								<select ng-model="newOrderSelected" class="form-control" ng-options="option.name for option in statusOrder track by option.value" data-live-search="true" ng-init="newOrderSelected=statusOrder[getStatusOrder(order.orderstatus)]"></select>
+								 <span class="input-group-btn">
+									<button ng-click="saveOrderStatus(order, newOrderSelected)" class="btn btn-primary">Simpan</button>
+								</span>
+							</div>
+						</th>
+					</tr>
+				</tbody>
+			</table>
+			<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+			</div>
+		</div>
+		
+	  </div>
+	</div>
+	
+<!-- tambah data -->
+<script type="text/ng-template" id="showTabelKemungkinan.html" >
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close"  ng-click="cancel()"><span aria-hidden="1">&times;</span><span class="sr-only">Keluar</span></button>
+        <h3 class="modal-title" id="myModalLabel">New Order</h3>
+    </div>
+    <div class="modal-body">
+		
+    </div>
+    <div class="modal-footer" style="margin-top:0px"></div>
+</div>
+</script>

@@ -14,15 +14,22 @@
 					<tr>
 						<th width="1%">#</th>
 						<th>Nama</th>
+						<th>Alamat</th>
+						<th>No Telp</th>
+						<th>Email</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="cust in listCustomers">
+					<tr dir-paginate="cust in listCustomers|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
 						<th scope="row">{{$index + 1}}.</th>
 						<td>{{cust.namacustomer}}</td>
+						<td>{{cust.alamat}}</td>
+						<td>{{cust.hp}}</td>
+						<td>{{cust.email}}</td>
 					</tr>
 				</tbody>
 			</table>
+			<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
 			</div>
 		</div>
 		
