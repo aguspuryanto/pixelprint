@@ -1,0 +1,66 @@
+<header ng-include="'pages/header.html'"></header>
+	
+	<div class="container-fluid">
+	  <div class="starter-template">
+		
+		<div class="col-md-3">
+			<div class="panel panel-default">
+				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">Tambah Status Order</h3>
+				</div>
+				<div class="panel-body">
+					<form ng-submit="saveStatusOrder()" name="myForm">
+						<div class="input-group">
+							<input type="text" ng-model="addstatusOrder" class="form-control">
+							<span class="input-group-btn">
+								<button type="submit" class="btn btn-primary">Simpan</button>
+							</span>
+						</div>
+					</form>
+					
+					<ul class="list-group">
+					  <li ng-repeat="sts in statusOrder | orderBy : 'id'" class="list-group-item">{{$index+1}}. {{sts.status}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-3">
+			<div class="panel panel-default">
+				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">Tambah Level User</h3>
+				</div>
+				<div class="panel-body">
+					<form ng-submit="saveStatusOrder()">
+						<div class="input-group">
+							<input type="text" name="statusOrder" class="form-control">
+							<span class="input-group-btn">
+								<button type="submit" class="btn btn-primary">Simpan</button>
+							</span>
+						</div>
+					</form>
+					
+					<ul class="list-group">
+					  <li class="list-group-item">Cras justo odio</li>
+					  <li class="list-group-item">Dapibus ac facilisis in</li>
+					  <li class="list-group-item">Morbi leo risus</li>
+					  <li class="list-group-item">Porta ac consectetur ac</li>
+					  <li class="list-group-item">Vestibulum at eros</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">{{title}}</h3>
+				</div>
+				<div class="panel-body">
+					
+				</div>
+			</div>
+		</div>
+		
+	  </div>
+	</div>

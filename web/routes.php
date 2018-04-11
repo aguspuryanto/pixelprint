@@ -189,7 +189,8 @@ $app->post('/listOrder[/]', function ($request, $response, $args) {
 	$paramData = $request->getParsedBody();
 	// return $response->withJson($paramData); die();
 	
-	$result = DB::table("wp0e_pxmyorder");		
+	$result = DB::table("wp0e_pxmyorder")->leftJoin("wp0e_pxusers", "wp0e_pxusers.id", "=", "wp0e_pxmyorder.orderopr")->select('wp0e_pxmyorder.*', 'wp0e_pxusers.name as oprname');
+		
 	/* if($paramData['user_id']>1 && $paramData['user_level']!=3){
 		$result = $result->where('orderopr', $paramData['user_id']);
 	} */	
@@ -197,12 +198,34 @@ $app->post('/listOrder[/]', function ($request, $response, $args) {
 	if($paramData['params']){
 		$result = $result->where('orderstatus', ucwords($paramData['params']));
 	}
-	$result = $result->orderBy('orderid', 'DESC')->get();
+	$result = $result->orderBy('orderdeadline', 'ASC')->get();
 	// return $response->withJson( toDebug($result) );
 	
 	return $response->withStatus(200)
         ->withHeader('Content-Type', 'application/json')
         ->write($result);
+});
+
+$app->post('/deleteUsr[/]', function ($request, $response, $args) {
+	$paramData = $request->getParsedBody();
+	// return $response->withJson($paramData); die();
+	
+	$tokenAuth = $request->getHeader('Authorization');
+	// return $response->withJson($tokenAuth); die();
+	if($tokenAuth){
+		$deleteUsr = DB::table('wp0e_pxusers')->where('id', '=', $paramData['delete_id'])->delete();		
+		$result["error"] = false;
+        $result["msg"] = "User Telah Terhapus";
+	} else{
+		$result["error"] = true;
+		$result["msg"] = "No Authorization";
+	}
+	
+	$result = json_encode($result);
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write($result);
+	
 });
 
 $app->get('/listUsers[/]', function ($request, $response, $args) {
@@ -227,6 +250,14 @@ $app->get('/listUsers[/]', function ($request, $response, $args) {
         ->withHeader('Content-Type', 'application/json')
         ->write($result);
 }); */
+
+$app->get('/listStatusOrder[/]', function ($request, $response, $args) {
+	$result = DB::table("wp0e_pxstatusorder")->orderBy('id', 'DESC')->get();
+	
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write($result);
+});
 
 $app->get('/listCustomers[/]', function ($request, $response, $args) {
 	$result = DB::table("wp0e_pxmycustomer")->orderBy('idcust', 'DESC')->get();

@@ -14,6 +14,10 @@ myApp.config(function($routeProvider, $httpProvider) {
         templateUrl : "pages/myUsers.html",
 		controller: 'UserCtrl'
     })
+    .when("/myusers/:id", {
+        templateUrl : "pages/myUsers.html",
+		controller: 'UserCtrl'
+    })
     .when("/myorder", {
         templateUrl : "pages/myOrder.html",
 		controller: 'OrderCtrl'
@@ -25,6 +29,11 @@ myApp.config(function($routeProvider, $httpProvider) {
     .when("/mycustomer", {
         templateUrl : "pages/myCustomer.html",
 		controller: 'CustCtrl'
+    })
+    .when("/setting", {
+		title: 'Setting',
+        templateUrl : "pages/setting.html",
+		controller: 'SettingCtrl'
     })
     .when("/mykasir", {
         templateUrl : "pages/myKasir.html",
@@ -139,6 +148,20 @@ myApp.controller('MainCtrl', function ($scope, $http, $location) {
 		
 });
 
+myApp.controller('SettingCtrl', function ($scope, $http, $location) {
+	console.log(" SettingCtrl ...");
+	
+	$scope.statusOrder = [];
+	$http.get("web/listStatusOrder/").then(function(reply) {
+		console.info("listStatusOrder: "+JSON.stringify(reply));
+		$scope.statusOrder = reply.data;
+	});
+	
+	$scope.saveStatusOrder = function(){
+		console.info( "New statusOrder: " + $scope.addstatusOrder );
+	}
+});
+
 myApp.controller('LogoutCtrl', function ($scope, $http, $location) {
 	console.log(" redirect to /home");
 	sessionStorage.clear();	
@@ -178,11 +201,21 @@ myApp.controller('OrderCtrl', function ($scope, $http, $location, $routeParams) 
 	console.log( "routeParams: " + $scope.params );
 	
 	$scope.formatDate = function(date){
-		console.info( date );
+		// console.info( date );
 		var dateOut = new Date(date);
 		return dateOut;
 	};
 	
+	$scope.dtime = function dtime(ndate){
+		var a = new Date();
+		var dateString = moment(ndate).format('MM/DD/YYYY');
+		var b = new Date(dateString);
+		
+		var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+		var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+		return Math.floor((utc2 - utc1) / (1000 * 3600 * 24));
+	}
+		
 	$scope.userName = '';
 	if(sessionStorage.getItem('user')){
 		console.info( "user: " + sessionStorage.getItem('user') );
@@ -200,24 +233,19 @@ myApp.controller('OrderCtrl', function ($scope, $http, $location, $routeParams) 
 		$.growl.error({ message: "Gagal Akses API >"+error });
 	});
 	
-	$scope.statusOrder = [
-		{value: 0, name: 'Design' },
-		{value: 1, name: 'Indoor' },
-		{value: 2, name: 'Outdoor' },
-		{value: 3, name: 'A3' },
-		{value: 4, name: 'Offset' },
-		{value: 5, name: 'Lainnya' },
-		{value: 6, name: 'Ready' },
-		{value: 7, name: 'Sudah Diambil' }
-	];
+	$scope.statusOrder = [];
+	$http.get("web/listStatusOrder/").then(function(reply) {
+		console.info("listStatusOrder: "+JSON.stringify(reply));
+		$scope.statusOrder = reply.data;
+	});
 	
 	$scope.getStatusOrder = function(val){
-		// console.info( val );
+		console.info( val );
 		var statusOrderSelected = 0;
 		angular.forEach($scope.statusOrder, function(Obj, index){
-			if(val==Obj.name){
+			if(val==Obj.id){
 				// console.info( Obj );
-				statusOrderSelected = Obj.value;
+				statusOrderSelected = Obj.id;
 			}
 		});
 		return statusOrderSelected;
@@ -248,9 +276,19 @@ myApp.controller('OrderCtrl', function ($scope, $http, $location, $routeParams) 
 		});
 	}
 	
+	// sort
+	$scope.sort = function(keyname){
+		console.info( "sort " + keyname );
+        $scope.sortKey = keyname;   //set the sortKey to the param passed
+        $scope.reverse = !$scope.reverse; //if true make it false and vice versa
+    }
+	
 });
 
-myApp.controller('UserCtrl', function ($scope, $http, $location) {
+myApp.controller('UserCtrl', function ($scope, $http, $location, $routeParams) {
+	
+	$scope.params = $routeParams.param;
+	console.log( "routeParams: " + $scope.params );
 	
 	$scope.listUsers = [];	
 	$scope.newUser = function(newUsers){			
@@ -266,6 +304,29 @@ myApp.controller('UserCtrl', function ($scope, $http, $location) {
 			}
 		})
 		.catch(function activateError(error) {
+			$.growl.error({ message: "Gagal Akses API >"+error });
+		});
+	}
+	
+	$scope.deleteUser = function(userid){
+		console.info('Delete User : ' + userid);
+		
+		$http.post("web/deleteUsr/", {
+			user_id: sessionStorage.getItem('userid'),
+			user_level: sessionStorage.getItem('level'),
+			delete_id: userid
+		}).then(function(reply) {		
+			// $scope.listOrders = response.data;
+			if(reply.status === 200){
+				console.info("reply: "+JSON.stringify(reply));
+				if(!reply.data.error){
+					$.growl.notice({ message: reply.data.msg });
+					$scope.loadUsers();
+				} else{
+					$.growl.error({ message: reply.data.msg });
+				}
+			}
+		},function (error) { 
 			$.growl.error({ message: "Gagal Akses API >"+error });
 		});
 	}
@@ -402,16 +463,13 @@ myApp.controller('DashCtrl', function ($scope, $http, $location) {
 			$location.path('/logout');
 		}
 		
-		$scope.statusOrder = [
-			{value: 0, name: 'Design' },
-			{value: 1, name: 'Indoor' },
-			{value: 2, name: 'Outdoor' },
-			{value: 3, name: 'A3' },
-			{value: 4, name: 'Offset' },
-			{value: 5, name: 'Lainnya' },
-			{value: 6, name: 'Ready' },
-			{value: 7, name: 'Sudah Diambil' }
-		];
+		$scope.statusOrder = function(){
+			// listStatusOrder
+			$http.get("web/listStatusOrder/").then(function(reply) {
+				console.info("listStatusOrder: "+JSON.stringify(reply));
+				return reply.data;
+			});
+		};
 		// console.info( $scope.statusOrder );
 		
 		$scope.reset = function () {
@@ -523,6 +581,10 @@ myApp.run(['$rootScope', '$location', '$http', 'editableOptions', function ($roo
 			$location.path('/home');
 		}
 	});
+	
+	$rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+        $rootScope.title = current.$$route.title;
+    });
 }]);
 	
 myApp.factory('logoutService', function ($location) {

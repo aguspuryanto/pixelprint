@@ -68,6 +68,15 @@ body {
 	padding: 9px 12px;
 }
 
+.sort-icon {
+    /* font-size: 9px;
+    margin-left: 5px; */
+}
+
+th {
+    cursor:pointer;
+}
+
 /* td span.label-default { margin-top: 5px; }
 
 tr.success { background-color: #33FF66 !important; }
@@ -86,7 +95,7 @@ tr.dark-red { background-color: #CC0000 !important; } */
       padding-top:10px;
     }
 	
-	.navbar  .container {
+	.navbar .container {
 		padding-left: 15px;
 		padding-right: 15px;
 	}

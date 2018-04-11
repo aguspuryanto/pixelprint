@@ -1,6 +1,6 @@
 <header ng-include="'pages/header.html'"></header>
 	
-	<div class="container">
+	<div class="container-fluid">
 	  <div class="starter-template">
 	  
 		<div class="panel panel-default">
@@ -101,12 +101,17 @@
 				<tbody>
 					<tr ng-class="{'warning': dtime(order.orderdeadline) == 1, 'yellow': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3, 'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrder|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
 					<!-- <tr ng-repeat="order in listOrder"> -->
-						<th scope="row">{{order.orderdate}}</th>
+						<th scope="row">{{formatDate(order.orderdate) | date:"dd-MM-yyyy HH:mm"}}</th>
 						<td>{{order.nomorso}}</td>
 						<td>{{order.namapelanggan}}</td>
 						<td>{{order.orderitem}}</td>
 						<td>{{order.orderjml}}</td>
-						<td>{{formatDate(order.orderdeadline) | date:"yyyy-MM-dd"}} <div class="hide"><span class="label label-default">* {{dtime(order.orderdeadline)}} x 24Jam</span></div></td>
+						<td>
+							<div class="pull-left">{{formatDate(order.orderdeadline) | date:"dd-MM-yyyy"}}</div>
+							<div class="notif pull-right" style="padding-top:8px">
+								<span class="label label-default">* {{dtime(order.orderdeadline)}} x 24Jam</span>
+							</div>
+						</td>
 						<td>{{order.orderketerangan}}</td>
 						<td class="text-center">
 							<a href="#/myorder/{{order.orderstatus | slugify}}">{{order.orderstatus}}</a>

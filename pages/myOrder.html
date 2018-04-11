@@ -1,6 +1,6 @@
 <header ng-include="'pages/header.html'"></header>
 	
-	<div class="container">
+	<div class="container-fluid">
 	  <div class="starter-template">
 	  
 		<div class="panel panel-default">
@@ -13,30 +13,37 @@
 				<thead>
 					<tr>
 						<th>Tgl</th>
-						<th>No SO</th>
+						<th ng-click="sort('nomorso')">No SO <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='nomorso'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
 						<th>Nama</th>
 						<th>Item</th>
 						<th>Jml</th>
-						<th>Deadline</th>
+						<th ng-click="sort('orderdeadline')">Deadline <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='orderdeadline'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
 						<th>Keterangan</th>
-						<th>Status</th>
+						<th ng-click="sort('oprname')">Operator <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='oprname'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
+						<th ng-click="sort('orderstatus')">Status <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='orderstatus'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-class="{'warning': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3,
              'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrders|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
 					<!-- <tr ng-repeat="order in listOrder"> -->
-						<th scope="row">{{order.orderdate}}</th>
+						<th scope="row">{{formatDate(order.orderdate) | date:"dd-MM-yyyy HH:mm"}}</th>
 						<td>{{order.nomorso}}</td>
 						<td>{{order.namapelanggan}}</td>
 						<td>{{order.orderitem}}</td>
 						<td>{{order.orderjml}}</td>
-						<td>{{formatDate(order.orderdeadline) | date:"yyyy-MM-dd"}} <div class="hide"><span class="label label-default">* {{dtime(order.orderdeadline)}} x 24Jam</span></div></td>
+						<td>
+							<div class="pull-left">{{formatDate(order.orderdeadline) | date:"dd-MM-yyyy"}}</div>
+							<div class="notif pull-right" style="padding-top:8px">
+								<span class="label label-default">* {{dtime(order.orderdeadline)}} x 24Jam</span>
+							</div>
+						</td>
 						<td>{{order.orderketerangan}}</td>
+						<td>{{order.oprname}}</td>
 						<th scope="row" class="text-center">
 							<span ng-hide="order.nomorso">{{order.orderstatus}}</span>
 							<div class="input-group" ng-hide="!order.nomorso">
-								<select ng-model="newOrderSelected" class="form-control" ng-options="option.name for option in statusOrder track by option.value" data-live-search="true" ng-init="newOrderSelected=statusOrder[getStatusOrder(order.orderstatus)]"></select>
+								<select ng-model="newOrderSelected" class="form-control" ng-options="option.status for option in statusOrder track by option.id" data-live-search="true" ng-init="newOrderSelected=statusOrder[getStatusOrder(order.orderstatus)]"></select>
 								 <span class="input-group-btn">
 									<button ng-click="saveOrderStatus(order, newOrderSelected)" class="btn btn-primary">Simpan</button>
 								</span>

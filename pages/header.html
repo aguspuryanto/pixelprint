@@ -16,13 +16,14 @@
             <li ng-hide="userLevel==3"><a href="#/myorder">my Order</a></li>
             <li ng-hide="userLevel!=10"><a href="#/mycustomer">my Customer</a></li>
             <li ng-hide="userLevel!=10"><a href="#/myhistory">my History</a></li>
+            <li ng-hide="userLevel!=10"><a href="#/setting"><i class="glyphicon glyphicon-cog"></i> Setting</a></li>
           </ul>
 		  
 		  <ul class="nav navbar-nav navbar-right">
-			<li class="active"><a href >{{userName}} ({{userLevel}})</a></li>
+			<li class="active"><a href>{{userName}} ({{userLevel}})</a></li>
 			<li>
 				<a href="#/logout" data-toggle="modal" data-target="#">
-					<i class="glyphicon glyphicon-log-out"></i>Logout
+					<i class="glyphicon glyphicon-log-out"></i> Logout
 				</a>
 			</li>
 		  </ul>
