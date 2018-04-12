@@ -189,16 +189,20 @@ $app->post('/listOrder[/]', function ($request, $response, $args) {
 	$paramData = $request->getParsedBody();
 	// return $response->withJson($paramData); die();
 	
-	$result = DB::table("wp0e_pxmyorder")->leftJoin("wp0e_pxusers", "wp0e_pxusers.id", "=", "wp0e_pxmyorder.orderopr")->select('wp0e_pxmyorder.*', 'wp0e_pxusers.name as oprname');
+	$result = DB::table("wp0e_pxmyorder")
+		->leftJoin("wp0e_pxusers", "wp0e_pxusers.id", "=", "wp0e_pxmyorder.orderopr")
+		->leftJoin("wp0e_pxstatusorder", "wp0e_pxstatusorder.id", "=", "wp0e_pxmyorder.orderstatus")
+		->select('wp0e_pxmyorder.*', 'wp0e_pxusers.name as oprname', 'wp0e_pxstatusorder.status');
 		
 	/* if($paramData['user_id']>1 && $paramData['user_level']!=3){
 		$result = $result->where('orderopr', $paramData['user_id']);
 	} */	
 	
-	if($paramData['params']){
-		$result = $result->where('orderstatus', ucwords($paramData['params']));
+	if($paramData['status']){
+		$result = $result->where('orderstatus', ucwords($paramData['status']));
 	}
-	$result = $result->orderBy('orderdeadline', 'ASC')->get();
+	// $result = $result->orderBy('orderdeadline', 'ASC')->get();
+	$result = $result->orderBy('orderid', 'DESC')->get();
 	// return $response->withJson( toDebug($result) );
 	
 	return $response->withStatus(200)
@@ -257,6 +261,71 @@ $app->get('/listStatusOrder[/]', function ($request, $response, $args) {
 	return $response->withStatus(200)
         ->withHeader('Content-Type', 'application/json')
         ->write($result);
+});
+
+$app->post('/addStatusOrder[/]', function ($request, $response, $args) {
+	$paramData = $request->getParsedBody();
+	// return $response->withJson($paramData); die();
+	$statusOrder = array(
+		'status' => $paramData['orderstatus']
+	);
+	
+	$insertLogger = DB::table('wp0e_pxlog')->insert(array(
+		'orderid' => $paramData['orderid'],
+		'update' => date("Y-m-d H:i:s"),
+		'operator' => $paramData['user_id'],
+		'ket' => 'New StatusOrder : '.$paramData['orderstatus'],
+	));
+	
+	$insertStatusOrder = DB::table('wp0e_pxstatusorder')->insert($statusOrder);	
+	if($insertStatusOrder){
+		$result["error"] = false;
+        $result["msg"] = "Data Tersimpan";
+	}else{
+		$result["error"] = true;
+        $result["msg"] = "Gagal simpan data";
+	}
+	
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($result));
+});
+
+$app->get('/userRole[/]', function ($request, $response, $args) {
+	$result = DB::table("wp0e_pxusersrole")->orderBy('id', 'DESC')->get();
+	
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write($result);
+});
+
+$app->get('/adduserRole[/]', function ($request, $response, $args) {
+	$paramData = $request->getParsedBody();
+	// return $response->withJson($paramData); die();
+	$userRole = array(
+		'id_role' => $paramData['levelid'],
+		'user_role' => $paramData['leveluser']
+	);
+	
+	$insertLogger = DB::table('wp0e_pxlog')->insert(array(
+		'orderid' => $paramData['orderid'],
+		'update' => date("Y-m-d H:i:s"),
+		'operator' => $paramData['user_id'],
+		'ket' => 'New userRole : '.$paramData['orderstatus'],
+	));
+	
+	$insertuserRole = DB::table('wp0e_pxusersrole')->insert($userRole);	
+	if($insertuserRole){
+		$result["error"] = false;
+        $result["msg"] = "Data Tersimpan";
+	}else{
+		$result["error"] = true;
+        $result["msg"] = "Gagal simpan data";
+	}
+	
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($result));
 });
 
 $app->get('/listCustomers[/]', function ($request, $response, $args) {

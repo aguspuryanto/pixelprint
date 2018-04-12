@@ -39,7 +39,7 @@
 						<th scope="row" class="text-center">
 							<span ng-show="order.nomorso==0">{{order.orderstatus}}</span>
 							<div ng-hide="order.nomorso==0" class="input-group">
-								<select ng-model="newOrderSelected" class="form-control" ng-options="option.name for option in statusOrder track by option.value" data-live-search="true" ng-init="newOrderSelected=statusOrder[getStatusOrder(order.orderstatus)]"></select>
+								<select ng-model="newOrderSelected" class="form-control" ng-options="option.status for option in statusOrder track by option.id" data-live-search="true" ng-init="newOrderSelected=statusOrder[getStatusOrder(order.orderstatus)]" />
 								 <span class="input-group-btn">
 									<button ng-click="saveOrderStatus(order, newOrderSelected)" class="btn btn-primary">Simpan</button>
 								</span>

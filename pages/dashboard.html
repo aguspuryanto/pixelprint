@@ -45,15 +45,15 @@
 				  <div ng-repeat="order in myOrder" class="row">
 					<div class="col-md-4 col-xs-4">
 						<label>Item</label>
-						<input type="text" ng-model="addItem.item" class="form-control"/>
+						<input type="text" ng-model="addItem.item" class="form-control" required/>
 					</div>
 					<div class="col-md-2 col-xs-2">
 						<label>Jumlah</label>
-						<input type="number" ng-model="addItem.jml" class="form-control" placeholder="No SO" />
+						<input type="number" ng-model="addItem.jml" class="form-control" placeholder="No SO" required/>
 					</div>
 					<div class="col-md-2 col-xs-2">
 						<label>Deadline</label>
-						<input type="text" class="form-control" ng-model="addItem.ddline" datepicker/>
+						<input type="text" class="form-control" ng-model="addItem.ddline" datepicker required/>
 						<!-- <div id="dashb" class="input-group">
 							<input type="text" class="form-control form_datetime" ng-model="addItem.ddline" datepicker/>
 							<span class="input-group-btn" style="width:0px;"></span>
@@ -65,7 +65,7 @@
 					</div>
 					<div class="col-md-4 col-xs-4">
 						<label>Keterangan</label>
-						<input type="text" ng-model="addItem.ket" class="form-control"/>
+						<input type="text" ng-model="addItem.ket" class="form-control" required/>
 					</div>
 				  </div>
 			  </div>
@@ -114,7 +114,7 @@
 						</td>
 						<td>{{order.orderketerangan}}</td>
 						<td class="text-center">
-							<a href="#/myorder/{{order.orderstatus | slugify}}">{{order.orderstatus}}</a>
+							<a href="#/myorder/{{order.status | slugify}}">{{order.status}}</a>
 							<!-- <select class="form-control" ng-options="option.name for option in statusOrder"></select> -->
 						</td>
 					</tr>

@@ -15,8 +15,8 @@ myApp.config(function($routeProvider, $httpProvider) {
 		controller: 'UserCtrl'
     })
     .when("/myusers/:id", {
-        templateUrl : "pages/myUsers.html",
-		controller: 'UserCtrl'
+        templateUrl : "pages/myEditUsers.html",
+		controller: 'EditUserCtrl'
     })
     .when("/myorder", {
         templateUrl : "pages/myOrder.html",
@@ -152,13 +152,67 @@ myApp.controller('SettingCtrl', function ($scope, $http, $location) {
 	console.log(" SettingCtrl ...");
 	
 	$scope.statusOrder = [];
-	$http.get("web/listStatusOrder/").then(function(reply) {
-		console.info("listStatusOrder: "+JSON.stringify(reply));
-		$scope.statusOrder = reply.data;
-	});
+	$scope.getstatusOrder = function(){
+		$http.get("web/listStatusOrder/").then(function(reply) {
+			console.info("listStatusOrder: "+JSON.stringify(reply));
+			$scope.statusOrder = reply.data;
+		});
+	}
 	
 	$scope.saveStatusOrder = function(){
 		console.info( "New statusOrder: " + $scope.addstatusOrder );
+		
+		var dataSend = {
+			user_id: sessionStorage.getItem('userid'),
+			user_level: sessionStorage.getItem('level'),
+			// orderid: so.orderid,
+			orderstatus: $scope.addstatusOrder
+		};
+		
+		$http.post("web/addStatusOrder/", dataSend).then(function(reply) {
+			console.info(reply);
+			if(reply.status === 200){
+				$.growl.notice({ message: reply.data.msg });
+				$scope.getstatusOrder();
+			}else{
+				$.growl.error({ message: reply.data.msg });
+			}
+			
+		},function (error) { 
+			$.growl.error({ message: "Gagal Akses API >"+error });
+		});
+	}
+	
+	$scope.userRole = [];
+	$scope.getuserRole = function(){
+		$http.get("web/userRole/").then(function(reply) {
+			console.info("userRole: "+JSON.stringify(reply));
+			$scope.userRole = reply.data;
+		});
+	}
+	
+	$scope.saveLevelUser = function(){
+		console.info( "New LevelUser: " + $scope.addlevelUser );
+		
+		var dataSend = {
+			user_id: sessionStorage.getItem('userid'),
+			user_level: sessionStorage.getItem('level'),
+			levelid: $scope.addlevelId,
+			leveluser: $scope.addlevelUser
+		};
+		
+		$http.post("web/adduserRole/", dataSend).then(function(reply) {
+			console.info(reply);
+			if(reply.status === 200){
+				$.growl.notice({ message: reply.data.msg });
+				$scope.getuserRole();
+			}else{
+				$.growl.error({ message: reply.data.msg });
+			}
+			
+		},function (error) { 
+			$.growl.error({ message: "Gagal Akses API >"+error });
+		});
 	}
 });
 
@@ -197,8 +251,32 @@ myApp.controller('CustCtrl', function ($scope, $http, $location) {
 
 myApp.controller('OrderCtrl', function ($scope, $http, $location, $routeParams) {
 	
-	$scope.params = $routeParams.param;
-	console.log( "routeParams: " + $scope.params );
+	String.prototype.ucfirst = function(){
+		return this.charAt(0).toUpperCase() + this.substr(1);
+	}
+	
+	$scope.statusName = $routeParams.param;
+	$scope.statusName = $scope.statusName.ucfirst();
+	console.log( "routeParams: " + $scope.statusName );
+	// console.log( "routeParams: " + $scope.getStatusOrder($scope.statusName) );
+	
+	$scope.statusOrder = [];
+	$http.get("web/listStatusOrder/").then(function(reply) {
+		console.info("listStatusOrder: "+JSON.stringify(reply));
+		$scope.statusOrder = reply.data;
+	});
+	
+	$scope.getStatusOrder = function(val){
+		console.info( "orderstatus:" + val );
+		var statusOrderSelected = 0;
+		angular.forEach($scope.statusOrder, function(Obj, index){
+			if(val==Obj.status){
+				// console.info( Obj );
+				statusOrderSelected = Obj.id;
+			}
+		});
+		return statusOrderSelected;
+	}
 	
 	$scope.formatDate = function(date){
 		// console.info( date );
@@ -221,35 +299,17 @@ myApp.controller('OrderCtrl', function ($scope, $http, $location, $routeParams) 
 		console.info( "user: " + sessionStorage.getItem('user') );
 		$scope.userName = sessionStorage.getItem('user');
 	}
-		
+	
 	$scope.listOrders = [];
 	$http.post("web/listOrder/", {
 		user_id: sessionStorage.getItem('userid'),
-		params: $scope.params
+		status: $scope.getStatusOrder($scope.statusName)
 	}).then(function(response) {
 		
 		$scope.listOrders = response.data;
 	},function (error) { 
 		$.growl.error({ message: "Gagal Akses API >"+error });
 	});
-	
-	$scope.statusOrder = [];
-	$http.get("web/listStatusOrder/").then(function(reply) {
-		console.info("listStatusOrder: "+JSON.stringify(reply));
-		$scope.statusOrder = reply.data;
-	});
-	
-	$scope.getStatusOrder = function(val){
-		console.info( val );
-		var statusOrderSelected = 0;
-		angular.forEach($scope.statusOrder, function(Obj, index){
-			if(val==Obj.id){
-				// console.info( Obj );
-				statusOrderSelected = Obj.id;
-			}
-		});
-		return statusOrderSelected;
-	}
 	
 	$scope.saveOrderStatus = function(so, newso){
 		// console.info('Sales Order : ', so);
@@ -285,11 +345,35 @@ myApp.controller('OrderCtrl', function ($scope, $http, $location, $routeParams) 
 	
 });
 
+myApp.controller('EditUserCtrl', function ($scope, $http, $location, $routeParams) {
+	
+	$scope.id = $routeParams.id;
+	console.log( "UserID: " + $scope.id );
+	
+	$scope.user = [];
+	
+	$scope.userRole = [];
+	/* $http.get("web/userRole/").then(function(reply) {
+		console.info("userRole: "+JSON.stringify(reply));
+		$scope.userRole = reply.data;
+	}); */
+	
+	$scope.listUsers = [];
+	/* $http.get("web/listUsers/").then(function(response) {
+		$scope.listUsers = response.data;
+	}); */
+	
+	$scope.user = {
+		// display_name: usr.name, email: usr.email, password: usr.password, level: usr.level
+	}
+});
+
 myApp.controller('UserCtrl', function ($scope, $http, $location, $routeParams) {
 	
-	$scope.params = $routeParams.param;
-	console.log( "routeParams: " + $scope.params );
+	/* $scope.params = $routeParams.param;
+	console.log( "routeParams: " + $scope.params ); */
 	
+	// $scope.user = [];	
 	$scope.listUsers = [];	
 	$scope.newUser = function(newUsers){			
 		$http.post("web/addUser/",JSON.stringify(newUsers)).then(function(reply) {			
@@ -307,6 +391,13 @@ myApp.controller('UserCtrl', function ($scope, $http, $location, $routeParams) {
 			$.growl.error({ message: "Gagal Akses API >"+error });
 		});
 	}
+	
+	/* $scope.editUser = function(usr){
+		console.info('Edit User : ' + JSON.stringify(usr));
+		$scope.user = {
+			display_name: usr.name, email: usr.email, password: usr.password, level: usr.level
+		}
+	} */
 	
 	$scope.deleteUser = function(userid){
 		console.info('Delete User : ' + userid);
@@ -370,16 +461,11 @@ myApp.controller('KasirCtrl', function ($scope, $http, $location) {
 		});
 	};
 	
-	$scope.statusOrder = [
-		{value: 0, name: 'Design' },
-		{value: 1, name: 'Indoor' },
-		{value: 2, name: 'Outdoor' },
-		{value: 3, name: 'A3' },
-		{value: 4, name: 'Offset' },
-		{value: 5, name: 'Lainnya' },
-		{value: 6, name: 'Ready' },
-		{value: 7, name: 'Sudah Diambil' }
-	];
+	$scope.statusOrder = [];
+	$http.get("web/listStatusOrder/").then(function(reply) {
+		console.info("listStatusOrder: "+JSON.stringify(reply));
+		$scope.statusOrder = reply.data;
+	});
 	
 	$scope.getStatusOrder = function(val){
 		// console.info( val );

@@ -3,7 +3,7 @@
 	<div class="container-fluid">
 	  <div class="starter-template">
 		
-		<div class="col-md-3">
+		<div class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-heading clearfix">
 					<h3 class="panel-title pull-left">Tambah Status Order</h3>
@@ -13,39 +13,13 @@
 						<div class="input-group">
 							<input type="text" ng-model="addstatusOrder" class="form-control">
 							<span class="input-group-btn">
-								<button type="submit" class="btn btn-primary">Simpan</button>
+								<button type="submit" class="btn btn-primary">Add Status Order</button>
 							</span>
 						</div>
 					</form>
 					
-					<ul class="list-group">
+					<ul class="list-group" ng-init="getstatusOrder()">
 					  <li ng-repeat="sts in statusOrder | orderBy : 'id'" class="list-group-item">{{$index+1}}. {{sts.status}}</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		
-		<div class="col-md-3">
-			<div class="panel panel-default">
-				<div class="panel-heading clearfix">
-					<h3 class="panel-title pull-left">Tambah Level User</h3>
-				</div>
-				<div class="panel-body">
-					<form ng-submit="saveStatusOrder()">
-						<div class="input-group">
-							<input type="text" name="statusOrder" class="form-control">
-							<span class="input-group-btn">
-								<button type="submit" class="btn btn-primary">Simpan</button>
-							</span>
-						</div>
-					</form>
-					
-					<ul class="list-group">
-					  <li class="list-group-item">Cras justo odio</li>
-					  <li class="list-group-item">Dapibus ac facilisis in</li>
-					  <li class="list-group-item">Morbi leo risus</li>
-					  <li class="list-group-item">Porta ac consectetur ac</li>
-					  <li class="list-group-item">Vestibulum at eros</li>
 					</ul>
 				</div>
 			</div>
@@ -54,13 +28,51 @@
 		<div class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-heading clearfix">
+					<h3 class="panel-title pull-left">Tambah Level User</h3>
+				</div>
+				<div class="panel-body">
+					<form class="form-inline" ng-submit="saveLevelUser()">
+						<div class="form-group">
+							<label>Role User</label>
+							<input type="text" ng-model="addlevelUser" class="form-control">
+							<!-- <span class="input-group-btn">
+								<button type="submit" class="btn btn-primary">Add Level User</button>
+							</span> -->
+						</div>
+						<div class="form-group">
+							<label>Level</label>
+							<select ng-model="addlevelId" class="form-control">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+							</select>
+						</div>
+						<button type="submit" class="btn btn-primary">Add Level User</button>
+					</form>
+					
+					<ul class="list-group" ng-init="getuserRole()">
+					  <li ng-repeat="ur in userRole | orderBy : 'id'" class="list-group-item">{{$index+1}}. {{ur.user_role}} <span class="pull-right">{{ur.id_role}}</span></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<!-- <div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-heading clearfix">
 					<h3 class="panel-title pull-left">{{title}}</h3>
 				</div>
 				<div class="panel-body">
 					
 				</div>
 			</div>
-		</div>
+		</div> -->
 		
 	  </div>
 	</div>

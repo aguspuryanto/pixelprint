@@ -33,7 +33,7 @@
 						<td>{{order.orderitem}}</td>
 						<td>{{order.orderjml}}</td>
 						<td>
-							<div class="pull-left">{{formatDate(order.orderdeadline) | date:"dd-MM-yyyy"}}</div>
+							<div class="pull-left">{{formatDate(order.orderdeadline) | date:"yyyy-MM-dd"}}</div>
 							<div class="notif pull-right" style="padding-top:8px">
 								<span class="label label-default">* {{dtime(order.orderdeadline)}} x 24Jam</span>
 							</div>
