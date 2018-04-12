@@ -256,7 +256,7 @@ $app->get('/listUsers[/]', function ($request, $response, $args) {
 }); */
 
 $app->get('/listStatusOrder[/]', function ($request, $response, $args) {
-	$result = DB::table("wp0e_pxstatusorder")->orderBy('id', 'DESC')->get();
+	$result = DB::table("wp0e_pxstatusorder")->orderBy('id', 'ASC')->get();
 	
 	return $response->withStatus(200)
         ->withHeader('Content-Type', 'application/json')
@@ -271,7 +271,7 @@ $app->post('/addStatusOrder[/]', function ($request, $response, $args) {
 	);
 	
 	$insertLogger = DB::table('wp0e_pxlog')->insert(array(
-		'orderid' => $paramData['orderid'],
+		'orderid' => 0, //Setting Page
 		'update' => date("Y-m-d H:i:s"),
 		'operator' => $paramData['user_id'],
 		'ket' => 'New StatusOrder : '.$paramData['orderstatus'],

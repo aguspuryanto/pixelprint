@@ -37,9 +37,9 @@
 						<td>{{formatDate(order.orderdeadline) | date:"yyyy-MM-dd"}}</td>
 						<td>{{order.orderketerangan}}</td>
 						<th scope="row" class="text-center">
-							<span ng-show="order.nomorso==0">{{order.orderstatus}}</span>
+							<span ng-show="order.nomorso==0">{{order.status}}</span>
 							<div ng-hide="order.nomorso==0" class="input-group">
-								<select ng-model="newOrderSelected" class="form-control" ng-options="option.status for option in statusOrder track by option.id" data-live-search="true" ng-init="newOrderSelected=statusOrder[getStatusOrder(order.orderstatus)]" />
+								<select ng-model="newOrderSelected" class="form-control" ng-options="option.status for option in statusOrder track by option.id" data-live-search="true" ng-init="newOrderSelected=statusOrder[order.orderstatus-1]" />
 								 <span class="input-group-btn">
 									<button ng-click="saveOrderStatus(order, newOrderSelected)" class="btn btn-primary">Simpan</button>
 								</span>

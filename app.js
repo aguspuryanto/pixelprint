@@ -254,29 +254,72 @@ myApp.controller('OrderCtrl', function ($scope, $http, $location, $routeParams) 
 	String.prototype.ucfirst = function(){
 		return this.charAt(0).toUpperCase() + this.substr(1);
 	}
+		
+	$scope.userName = '';
+	if(sessionStorage.getItem('user')){
+		// console.info( "user: " + sessionStorage.getItem('user') );
+		$scope.userName = sessionStorage.getItem('user');
+	}
 	
-	$scope.statusName = $routeParams.param;
-	$scope.statusName = $scope.statusName.ucfirst();
-	console.log( "routeParams: " + $scope.statusName );
-	// console.log( "routeParams: " + $scope.getStatusOrder($scope.statusName) );
+	if($routeParams.param){
+		$scope.statusName = $routeParams.param;
+		$scope.statusName = $scope.statusName.ucfirst();
+		console.log( "routeParams: " + $scope.statusName );
+		// console.log( "routeParams: " + $scope.getStatusOrder($scope.statusName) );
+	}
 	
 	$scope.statusOrder = [];
-	$http.get("web/listStatusOrder/").then(function(reply) {
-		console.info("listStatusOrder: "+JSON.stringify(reply));
-		$scope.statusOrder = reply.data;
-	});
-	
-	$scope.getStatusOrder = function(val){
-		console.info( "orderstatus:" + val );
-		var statusOrderSelected = 0;
-		angular.forEach($scope.statusOrder, function(Obj, index){
-			if(val==Obj.status){
-				// console.info( Obj );
-				statusOrderSelected = Obj.id;
-			}
+	/* $scope.statusOrder = [
+		{id: 1, status: 'Design' },
+		{id: 2, status: 'Kasir' },
+		{id: 3, status: 'Indoor' },
+		{id: 4, status: 'Outdoor' },
+		{id: 5, status: 'A3' },
+		{id: 6, status: 'Offset' },
+		{id: 7, status: 'Ready' },
+		{id: 8, status: 'Diambil' },
+		{id: 9, status: 'Laser Cutting' },
+		{id: 10, status: 'Finishing' },
+		{id: 11, status: 'Lainnya' }
+	]; */
+
+	$scope.listOrders = [];
+	function getStatusOrder(){
+		return $http.get("web/listStatusOrder/").then(function(reply) {
+			// console.info("listStatusOrder: "+JSON.stringify(reply));
+			return reply.data;
 		});
-		return statusOrderSelected;
 	}
+
+	getStatusOrder().then(function (data) {
+	    // console.log( " listStatusOrder: " + data);
+		$scope.statusOrder = data;
+	
+		$scope.getStatusOrder = function(val){
+			// console.info( "orderstatus:" + val );
+			var statusOrderSelected = 0;
+			angular.forEach($scope.statusOrder, function(Obj, index){
+				if(val==Obj.status){
+					// console.info( Obj );
+					statusOrderSelected = Obj.id;
+				}
+			});
+			return statusOrderSelected;
+		}
+
+		$http.post("web/listOrder/", {
+			user_id: sessionStorage.getItem('userid'),
+			status: $scope.getStatusOrder($scope.statusName)
+		}).then(function(response) {
+			
+			$scope.listOrders = response.data;
+		},function (error) { 
+			$.growl.error({ message: "Gagal Akses API >"+error });
+		});
+
+	}, function (error) {
+	    console.error(data);
+	})
 	
 	$scope.formatDate = function(date){
 		// console.info( date );
@@ -293,23 +336,18 @@ myApp.controller('OrderCtrl', function ($scope, $http, $location, $routeParams) 
 		var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 		return Math.floor((utc2 - utc1) / (1000 * 3600 * 24));
 	}
-		
-	$scope.userName = '';
-	if(sessionStorage.getItem('user')){
-		console.info( "user: " + sessionStorage.getItem('user') );
-		$scope.userName = sessionStorage.getItem('user');
-	}
 	
-	$scope.listOrders = [];
-	$http.post("web/listOrder/", {
-		user_id: sessionStorage.getItem('userid'),
-		status: $scope.getStatusOrder($scope.statusName)
-	}).then(function(response) {
-		
-		$scope.listOrders = response.data;
-	},function (error) { 
-		$.growl.error({ message: "Gagal Akses API >"+error });
-	});
+		/* $scope.getStatusOrder2 = function(val){
+			console.info( "orderstatus2: " + val );
+			var statusOrderSelected = 0;
+			angular.forEach($scope.statusOrder, function(Obj, index){
+				if(val==Obj.status){
+					// console.info( Obj );
+					statusOrderSelected = Obj.id;
+				}
+			});
+			return statusOrderSelected;
+		} */
 	
 	$scope.saveOrderStatus = function(so, newso){
 		// console.info('Sales Order : ', so);
@@ -449,7 +487,7 @@ myApp.controller('KasirCtrl', function ($scope, $http, $location) {
 	}
 		
 	$scope.listOrders = [];	
-	$scope.loadOrder = function(){
+	/* $scope.loadOrder = function(){
 		$http.post("web/listOrder/", {
 			user_id: sessionStorage.getItem('userid'),
 			user_level: sessionStorage.getItem('level'),
@@ -459,26 +497,59 @@ myApp.controller('KasirCtrl', function ($scope, $http, $location) {
 		},function (error) { 
 			$.growl.error({ message: "Gagal Akses API >"+error });
 		});
-	};
+	}; */
 	
 	$scope.statusOrder = [];
-	$http.get("web/listStatusOrder/").then(function(reply) {
-		console.info("listStatusOrder: "+JSON.stringify(reply));
-		$scope.statusOrder = reply.data;
-	});
+	/* $scope.statusOrder = [
+		{id: 1, status: 'Design' },
+		{id: 2, status: 'Kasir' },
+		{id: 3, status: 'Indoor' },
+		{id: 4, status: 'Outdoor' },
+		{id: 5, status: 'A3' },
+		{id: 6, status: 'Offset' },
+		{id: 7, status: 'Ready' },
+		{id: 8, status: 'Diambil' },
+		{id: 9, status: 'Laser Cutting' },
+		{id: 10, status: 'Finishing' },
+		{id: 11, status: 'Lainnya' }
+	]; */
 	
-	$scope.getStatusOrder = function(val){
-		// console.info( val );
-		var statusOrderSelected = 0;
-		angular.forEach($scope.statusOrder, function(Obj, index){
-			if(val==Obj.name){
-				// console.info( Obj );
-				statusOrderSelected = Obj.value;
-			}
+	function getStatusOrder(){
+		return $http.get("web/listStatusOrder/").then(function(reply) {
+			// console.info("listStatusOrder: "+JSON.stringify(reply));
+			return reply.data;
 		});
-		return statusOrderSelected;
 	}
-	// $scope.newOrderSelected = $scope.statusOrder[0];
+
+	getStatusOrder().then(function (data) {
+	    // console.log( " listStatusOrder: " + data);
+		$scope.statusOrder = data;
+	
+		$scope.getStatusOrder = function(val){
+			// console.info( "orderstatus:" + val );
+			var statusOrderSelected = 0;
+			angular.forEach($scope.statusOrder, function(Obj, index){
+				if(val==Obj.status){
+					// console.info( Obj );
+					statusOrderSelected = Obj.id;
+				}
+			});
+			return statusOrderSelected;
+		}
+
+		$http.post("web/listOrder/", {
+			user_id: sessionStorage.getItem('userid'),
+			status: $scope.getStatusOrder($scope.statusName)
+		}).then(function(response) {
+			
+			$scope.listOrders = response.data;
+		},function (error) { 
+			$.growl.error({ message: "Gagal Akses API >"+error });
+		});
+
+	}, function (error) {
+	    console.error(data);
+	})
 	
 	$scope.renameNomerSO = function(so){
 		console.info('Sales Order : ', so);
