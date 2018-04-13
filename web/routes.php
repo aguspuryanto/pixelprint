@@ -210,6 +210,44 @@ $app->post('/listOrder[/]', function ($request, $response, $args) {
         ->write($result);
 });
 
+$app->post('/updateUsr[/]', function ($request, $response, $args) {
+	$paramData = $request->getParsedBody();
+	// return $response->withJson($paramData); die();
+	
+	// enable the query log
+	DB::enableQueryLog();
+
+	$updateUser = DB::table("wp0e_pxusers")
+		->where('id', $paramData['user_editid'])
+		->update([
+			'name' => $paramData['data']['display_name'],
+			'password' => $paramData['data']['password'],
+			'level' => $paramData['data']['level']
+		]);
+	
+	// view the query log
+	// dd(DB::getQueryLog()); die();	
+	$insertLogger = DB::table('wp0e_pxlog')->insert(array(
+		'orderid' => 0,
+		'update' => date("Y-m-d H:i:s"),
+		'operator' => $paramData['user_id'],
+		'ket' => 'Update User : '.$paramData['data']['display_name'],
+	));
+		
+	if(!$updateUser){
+		$result["error"] = true;
+        $result["msg"] = "Gagal simpan data";
+	}else{
+		$result["error"] = false;
+        $result["msg"] = "Data Tersimpan";
+	}
+	
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($result));
+		
+});
+
 $app->post('/deleteUsr[/]', function ($request, $response, $args) {
 	$paramData = $request->getParsedBody();
 	// return $response->withJson($paramData); die();
@@ -232,11 +270,17 @@ $app->post('/deleteUsr[/]', function ($request, $response, $args) {
 	
 });
 
-$app->get('/listUsers[/]', function ($request, $response, $args) {
+$app->get('/listUsers[/[{id}]]', function ($request, $response, $args) {
 	
+	// echo json_encode($args['id']);
 	$tokenAuth = $request->getHeader('Authorization');
 	if($tokenAuth){
-		$result = DB::table("wp0e_pxusers")->orderBy('id', 'DESC')->get();
+		if($args['id']){
+			$result = DB::table("wp0e_pxusers")->where('id', '=', $args['id'])->get();
+		}else {
+			$result = DB::table("wp0e_pxusers")->orderBy('id', 'DESC')->get();
+		}
+		
 	} else{
 		$result["error"] = true;
 		$result["msg"] = "No Authorization";
@@ -350,12 +394,12 @@ $app->post('/listHistory[/]', function ($request, $response, $args) {
 	}		
 	$qry .= " order by a.id desc";
 	
-	$result = DB::select(DB::raw($qry));	
+	$result = DB::select(DB::raw($qry));
+	
 	return $response->withStatus(200)
         ->withHeader('Content-Type', 'application/json')
         ->write(json_encode($result));
 });
-
 
 function toDebug($builder){
 		

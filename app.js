@@ -388,8 +388,7 @@ myApp.controller('EditUserCtrl', function ($scope, $http, $location, $routeParam
 	$scope.id = $routeParams.id;
 	console.log( "UserID: " + $scope.id );
 	
-	$scope.user = [];
-	
+	$scope.user = [];	
 	$scope.userRole = [];
 	/* $http.get("web/userRole/").then(function(reply) {
 		console.info("userRole: "+JSON.stringify(reply));
@@ -397,12 +396,43 @@ myApp.controller('EditUserCtrl', function ($scope, $http, $location, $routeParam
 	}); */
 	
 	$scope.listUsers = [];
-	/* $http.get("web/listUsers/").then(function(response) {
-		$scope.listUsers = response.data;
-	}); */
+	function getListUsers(){
+		return $http.get("web/listUsers/" + $scope.id).then(function(response) {
+			return response.data;
+		});
+	}
 	
-	$scope.user = {
-		// display_name: usr.name, email: usr.email, password: usr.password, level: usr.level
+	getListUsers().then(function(data) {
+		// console.info("listUsers: "+JSON.stringify(data));
+		var usr = data[0];
+		$scope.user = {
+			display_name: usr.name, email: usr.email, password: usr.password, level: usr.level
+		};
+		// console.info("user: " + $scope.user);
+	});
+	
+	$scope.updateUser = function(user){
+		console.info('Update User : ' + JSON.stringify(user));
+		
+		$http.post("web/updateUsr/", {
+			user_id: sessionStorage.getItem('userid'),
+			user_level: sessionStorage.getItem('level'),
+			user_editid: $scope.id,
+			data: user
+		}).then(function(reply) {		
+			// $scope.listOrders = response.data;
+			if(reply.status === 200){
+				console.info("reply: "+JSON.stringify(reply));
+				if(!reply.data.error){
+					$.growl.notice({ message: reply.data.msg });
+					// $scope.loadUsers();
+				} else{
+					$.growl.error({ message: reply.data.msg });
+				}
+			}
+		},function (error) { 
+			$.growl.error({ message: "Gagal Akses API >"+error });
+		});
 	}
 });
 
@@ -466,7 +496,7 @@ myApp.controller('UserCtrl', function ($scope, $http, $location, $routeParams) {
 		});
 	}
 	
-	$scope.loadUsers();
+	// $scope.loadUsers();
 });
 
 myApp.controller('KasirCtrl', function ($scope, $http, $location) {
