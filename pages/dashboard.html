@@ -13,7 +13,7 @@
 		</div>
 		<div class="panel-body">
 		
-			<form ng-hide="userLevel!=1" ng-submit="newOrder(addItem)" role="form">
+			<form ng-hide="userLevel>1" ng-submit="newOrder(addItem)" role="form">
 			  <div class="form-group">
 				  <div class="row">
 					<div class="col-md-3 col-xs-3">
@@ -21,16 +21,16 @@
 						<input type="text" ng-model="addItem.nama" class="form-control" required/>
 					</div>
 					<div class="col-md-2 col-xs-2">
-						<label>No Handphone</label>
-						<input type="number" ng-model="addItem.mobile" class="form-control" required/>
+						<!-- <label>No Handphone</label>
+						<input type="number" ng-model="addItem.mobile" class="form-control" required/> -->
 					</div>
 					<div class="col-md-3 col-xs-3">
-						<label>Email</label>
-						<input type="email" ng-model="addItem.email" class="form-control" required/>
+						<!-- <label>Email</label>
+						<input type="email" ng-model="addItem.email" class="form-control" required/> -->
 					</div>
 					<div class="col-md-4 col-xs-4">
-						<label>Alamat</label>
-						<input type="text" ng-model="addItem.alamat" class="form-control"/>
+						<!-- <label>Alamat</label>
+						<input type="text" ng-model="addItem.alamat" class="form-control"/> -->
 						<!-- <div id="dashb" class="input-group">
 							<input type="text" class="form-control" ng-model="addItem.tglorder" datepicker/>
 							<span class="input-group-btn">
@@ -88,18 +88,20 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th width="17%">Tanggal Order</th>
-						<th>No SO</th>
-						<th>Nama</th>
+						<th width="15%">Tanggal Order</th>
+						<th ng-click="sort('nomorso')">No SO <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='nomorso'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
+						<th>Nama Pelanggan</th>
 						<th>Item</th>
 						<th>Jml</th>
-						<th width="20%">Deadline</th>
+						<th ng-click="sort('orderdeadline')">Deadline <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='orderdeadline'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
 						<th>Keterangan</th>
-						<th>Status Order</th>
+						<th ng-click="sort('orderstatus')">Status <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='orderstatus'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
+						<th ng-click="sort('oprname')">Operator <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='oprname'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
+						<th>#</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-class="{'warning': dtime(order.orderdeadline) == 1, 'yellow': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3, 'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrder|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
+					<tr ng-class="{'warning': dtime(order.orderdeadline) == 1, 'yellow': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3, 'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrder|orderBy:sortKey:reverse|filter:search|itemsPerPage:25">
 					<!-- <tr ng-repeat="order in listOrder"> -->
 						<th scope="row">{{formatDate(order.orderdate) | date:"dd-MM-yyyy HH:mm"}}</th>
 						<td>{{order.nomorso}}</td>
@@ -109,14 +111,18 @@
 						<td>
 							<div class="pull-left">{{formatDate(order.orderdeadline) | date:"dd-MM-yyyy"}}</div>
 							<div class="notif pull-right" style="padding-top:8px">
-								<span class="label label-default">* {{dtime(order.orderdeadline)}} x 24Jam</span>
+								<span class="label label-default">{{dtime(order.orderdeadline)}} hari</span>
 							</div>
 						</td>
 						<td>{{order.orderketerangan}}</td>
 						<td class="text-center">
-							<a href="#/myorder/{{order.status | slugify}}">{{order.status}}</a>
+							<a href="#/myorder/{{order.ordstatus | slugify}}">{{order.ordstatus}}</a>
 							<!-- <select class="form-control" ng-options="option.name for option in statusOrder"></select> -->
 						</td>
+						<td>{{order.oprname}}</td>
+						<td><div ng-show="userLevel==10">
+							<button ng-click="deleteOrder(order.orderid)" class="btn btn-danger">Delete</button>
+						</div></td>
 					</tr>
 				</tbody>
 			</table>
