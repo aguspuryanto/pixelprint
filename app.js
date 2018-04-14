@@ -136,7 +136,7 @@ myApp.controller('MainCtrl', function ($scope, $http, $location) {
 					}
 				}
 			},function (error) {
-				$.growl.error({ message: "Gagal Akses API >"+error });
+				$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 			});
 		}
 		
@@ -179,7 +179,7 @@ myApp.controller('SettingCtrl', function ($scope, $http, $location) {
 			}
 			
 		},function (error) { 
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 	}
 	
@@ -211,7 +211,7 @@ myApp.controller('SettingCtrl', function ($scope, $http, $location) {
 			}
 			
 		},function (error) { 
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 	}
 });
@@ -314,7 +314,7 @@ myApp.controller('OrderCtrl', function ($scope, $http, $location, $routeParams) 
 			
 			$scope.listOrders = response.data;
 		},function (error) { 
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 
 	}, function (error) {
@@ -357,21 +357,21 @@ myApp.controller('OrderCtrl', function ($scope, $http, $location, $routeParams) 
 			user_id: sessionStorage.getItem('userid'),
 			user_level: sessionStorage.getItem('level'),
 			orderid: so.orderid,
-			// orderstatus: newso.name
-			orderstatus: newso
+			orderstatus: newso.status,
+			orderstatus_id: newso.id
 		};
 		
 		$http.post("web/updtOrderStatus/", dataSend).then(function(reply) {
 			console.info(reply);
 			if(reply.status === 200){
 				$.growl.notice({ message: reply.data.msg });
-				$scope.loadOrder();
+				// $scope.loadOrder();
 			}else{
 				$.growl.error({ message: reply.data.msg });
 			}
 			
 		},function (error) { 
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 	}
 	
@@ -432,7 +432,7 @@ myApp.controller('EditUserCtrl', function ($scope, $http, $location, $routeParam
 				}
 			}
 		},function (error) { 
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 	}
 });
@@ -457,7 +457,7 @@ myApp.controller('UserCtrl', function ($scope, $http, $location, $routeParams) {
 			}
 		})
 		.catch(function activateError(error) {
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 	}
 	
@@ -487,7 +487,7 @@ myApp.controller('UserCtrl', function ($scope, $http, $location, $routeParams) {
 				}
 			}
 		},function (error) { 
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 	}
 	
@@ -526,7 +526,7 @@ myApp.controller('KasirCtrl', function ($scope, $http, $location) {
 		}).then(function(response) {		
 			$scope.listOrders = response.data;
 		},function (error) { 
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 	}; */
 	
@@ -575,7 +575,7 @@ myApp.controller('KasirCtrl', function ($scope, $http, $location) {
 			
 			$scope.listOrders = response.data;
 		},function (error) { 
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 
 	}, function (error) {
@@ -602,7 +602,7 @@ myApp.controller('KasirCtrl', function ($scope, $http, $location) {
 			}
 			
 		},function (error) { 
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 	}
 	
@@ -627,7 +627,7 @@ myApp.controller('KasirCtrl', function ($scope, $http, $location) {
 			}
 			
 		},function (error) { 
-			$.growl.error({ message: "Gagal Akses API >"+error });
+			$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 		});
 	}
 });
@@ -702,7 +702,7 @@ myApp.controller('DashCtrl', function ($scope, $http, $location) {
 					}
 				}
 			},function (error) {
-				$.growl.error({ message: "Gagal Akses API >"+error });
+				$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 			});
 		}
 		
@@ -725,7 +725,7 @@ myApp.controller('DashCtrl', function ($scope, $http, $location) {
 					}
 				}
 			},function (error) { 
-				$.growl.error({ message: "Gagal Akses API >"+error });
+				$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 			});
 		}
 		
@@ -738,7 +738,7 @@ myApp.controller('DashCtrl', function ($scope, $http, $location) {
 			}).then(function(response) {
 				$scope.listOrder = response.data;				
 			},function (error) { 
-				$.growl.error({ message: "Gagal Akses API >"+error });
+				$.growl.error({ message: "Gagal Akses API >" + JSON.stringify(error) });
 			});
 		}
 		

@@ -24,7 +24,7 @@
 				</thead>
 				<tbody>
 					<tr ng-class="{'warning': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3,
-             'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrders|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
+             'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrders|orderBy:sortKey:reverse|filter:search|itemsPerPage:25">
 					<!-- <tr ng-repeat="order in listOrder"> -->
 						<th scope="row">{{order.orderdate}}</th>
 						<td>
@@ -37,7 +37,7 @@
 						<td>{{formatDate(order.orderdeadline) | date:"yyyy-MM-dd"}}</td>
 						<td>{{order.orderketerangan}}</td>
 						<th scope="row" class="text-center">
-							<span ng-show="order.nomorso==0">{{order.status}}</span>
+							<span ng-show="order.nomorso==0">{{order.ordstatus}}</span>
 							<div ng-hide="order.nomorso==0" class="input-group">
 								<select ng-model="newOrderSelected" class="form-control" ng-options="option.status for option in statusOrder track by option.id" data-live-search="true" ng-init="newOrderSelected=statusOrder[order.orderstatus-1]" />
 								 <span class="input-group-btn">

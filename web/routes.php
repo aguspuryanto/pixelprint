@@ -163,7 +163,7 @@ $app->post('/updtOrderStatus[/]', function ($request, $response, $args) {
 	
 	$updateOrder = DB::table("wp0e_pxmyorder")
 		->where('orderid', $paramData['orderid'])
-		->update(['orderstatus' => $paramData['orderstatus']]);
+		->update(['orderstatus' => $paramData['orderstatus_id']]);
 		
 	$insertLogger = DB::table('wp0e_pxlog')->insert(array(
 		'orderid' => $paramData['orderid'],
@@ -256,6 +256,14 @@ $app->post('/deleteOrder[/]', function ($request, $response, $args) {
 		$deleteUsr = DB::table('wp0e_pxmyorder')->where('orderid', '=', $paramData['orderid'])->delete();		
 		$result["error"] = false;
         $result["msg"] = "Order Telah Terhapus";
+		
+		$insertLogger = DB::table('wp0e_pxlog')->insert(array(
+			'orderid' => 0,
+			'update' => date("Y-m-d H:i:s"),
+			'operator' => $paramData['user_id'],
+			'ket' => 'Delete Order : '.$paramData['orderid'],
+		));
+		
 	} else{
 		$result["error"] = true;
 		$result["msg"] = "No Authorization";
@@ -267,6 +275,44 @@ $app->post('/deleteOrder[/]', function ($request, $response, $args) {
         ->write($result);
 	
 });
+
+/* $app->post('/updateUsr[/]', function ($request, $response, $args) {
+	$paramData = $request->getParsedBody();
+	// return $response->withJson($paramData); die();
+	
+	// enable the query log
+	DB::enableQueryLog();
+
+	$updateUser = DB::table("wp0e_pxusers")
+		->where('id', $paramData['user_editid'])
+		->update([
+			'name' => $paramData['data']['display_name'],
+			'password' => $paramData['data']['password'],
+			'level' => $paramData['data']['level']
+		]);
+	
+	// view the query log
+	// dd(DB::getQueryLog()); die();	
+	$insertLogger = DB::table('wp0e_pxlog')->insert(array(
+		'orderid' => 0,
+		'update' => date("Y-m-d H:i:s"),
+		'operator' => $paramData['user_id'],
+		'ket' => 'Update User : '.$paramData['data']['display_name'],
+	));
+		
+	if(!$updateUser){
+		$result["error"] = true;
+        $result["msg"] = "Gagal simpan data";
+	}else{
+		$result["error"] = false;
+        $result["msg"] = "Data Tersimpan";
+	}
+	
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($result));
+		
+}); */
 
 $app->post('/deleteUsr[/]', function ($request, $response, $args) {
 	$paramData = $request->getParsedBody();
@@ -405,7 +451,7 @@ $app->post('/listHistory[/]', function ($request, $response, $args) {
 	$paramData = $request->getParsedBody();
 	// return $response->withJson($paramData); die();
 	
-	$qry = "select a.*,b.nomorso,c.name from wp0e_pxlog a
+	$qry = "select a.*,b.nomorso,b.namapelanggan,c.name from wp0e_pxlog a
 		left join wp0e_pxmyorder b on b.orderid = a.orderid
 		left join wp0e_pxusers c on c.id = a.operator";
 		
