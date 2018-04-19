@@ -106,7 +106,7 @@ myApp.directive('timepicker', function() {
   };
 });
 
-myApp.controller('MainCtrl', function ($scope, $http, $location) {
+myApp.controller('MainCtrl', function ($scope, $http, $location, $rootScope, $window) {
 		// console.log( "MainCtrl" );		
 		$scope.submitForm = function(){
 			console.log("posting data....");
@@ -128,8 +128,17 @@ myApp.controller('MainCtrl', function ($scope, $http, $location) {
 						sessionStorage.setItem('userid', response.data[0].id);
 						sessionStorage.setItem('authdata', btoa(response.data[0].email+':'+response.data[0].password));
 						
-						console.info( sessionStorage );
-						$location.path('/dashboard');
+						// console.info( sessionStorage );
+						// $location.path('/dashboard');
+						// $location.url('/dashboard');
+						
+						$scope.$watchGroup(['userId','userName','userLevel'], function() {
+							$rootScope.userId = sessionStorage.getItem('userid');
+							$rootScope.userName = sessionStorage.getItem('user');
+							$rootScope.userLevel = sessionStorage.getItem('level');
+						});
+
+						$location.url('/dashboard').replace().reload(false);
 					}else{
 						$scope.alertMsg = "Invalid Email or Password";
 						console.log( $scope.alertMsg );

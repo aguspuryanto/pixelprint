@@ -194,7 +194,7 @@ $app->post('/listOrder[/]', function ($request, $response, $args) {
 		left join wp0e_pxusers b on b.id=a.orderopr
 		left join wp0e_pxstatusorder c on c.id=a.orderstatus";
 		
-	if($paramData['status']){
+	if(isset($paramData['status'])){
 		$qry .= " where orderstatus = '".ucwords($paramData['status'])."'";
 	} else{
 		$qry .= " where orderstatus !=8 and MONTH(orderdate) = '".date('m')."'";
