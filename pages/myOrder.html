@@ -1,4 +1,4 @@
-<header data-ng-include data-src="'pages/header.html'" ng-init="!userId"></header>
+<header ng-include="'pages/header.html'"></header>
 	
 	<div class="container-fluid">
 	  <div class="starter-template">
@@ -14,7 +14,7 @@
 					<tr>
 						<th>Tgl</th>
 						<th ng-click="sort('nomorso')">No SO <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='nomorso'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
-						<th>Nama Pelanggan</th>
+						<th>Nama</th>
 						<th>Item</th>
 						<th>Jml</th>
 						<th ng-click="sort('orderdeadline')">Deadline <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='orderdeadline'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
@@ -25,7 +25,7 @@
 				</thead>
 				<tbody>
 					<tr ng-class="{'warning': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3,
-             'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrders|orderBy:sortKey:reverse|filter:search|itemsPerPage:25">
+             'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrders|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
 					<!-- <tr ng-repeat="order in listOrder"> -->
 						<th scope="row">{{formatDate(order.orderdate) | date:"dd-MM-yyyy HH:mm"}}</th>
 						<td>{{order.nomorso}}</td>
@@ -35,7 +35,7 @@
 						<td>
 							<div class="pull-left">{{formatDate(order.orderdeadline) | date:"yyyy-MM-dd"}}</div>
 							<div class="notif pull-right" style="padding-top:8px">
-								<span class="label label-default">{{dtime(order.orderdeadline)}} hari</span>
+								<span class="label label-default">* {{dtime(order.orderdeadline)}} x 24Jam</span>
 							</div>
 						</td>
 						<td>{{order.orderketerangan}}</td>

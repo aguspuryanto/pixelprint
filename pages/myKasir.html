@@ -1,4 +1,4 @@
-<header data-ng-include data-src="'pages/header.html'" ng-init="!userId"></header>
+<header ng-include="'pages/header.html'"></header>
 	
 	<div class="container-fluid">
 	  <div class="starter-template">
@@ -24,7 +24,7 @@
 				</thead>
 				<tbody>
 					<tr ng-class="{'warning': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3,
-             'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrders|orderBy:sortKey:reverse|filter:search|itemsPerPage:25">
+             'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrders|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
 					<!-- <tr ng-repeat="order in listOrder"> -->
 						<th scope="row">{{order.orderdate}}</th>
 						<td>

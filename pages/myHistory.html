@@ -1,4 +1,4 @@
-<header data-ng-include data-src="'pages/header.html'" ng-init="!userId"></header>
+<header ng-include="'pages/header.html'"></header>
 	
 	<div class="container-fluid">
 	  <div class="starter-template">
@@ -9,12 +9,6 @@
 		</div>
 		<div class="panel-body">
 			<div class="table-responsive">
-			<form class="form-inline">
-				<div class="form-group">
-					<label>Search</label>
-					<input type="text" ng-model="search" class="form-control" placeholder="Search">
-				</div>
-			</form>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -26,11 +20,10 @@
 					</tr>
 				</thead>
 				<tbody>
-					<!-- <tr ng-repeat="trx in listHistorys track by $index"> -->
-					<tr dir-paginate="trx in listHistorys|orderBy:sortKey:reverse|filter:search|itemsPerPage:25">
+					<tr ng-repeat="trx in listHistorys track by $index">
 					<!-- <tr ng-repeat="order in listOrder"> -->
 						<th scope="row">{{trx.update}}</th>
-						<td><div ng-show="trx.nomorso!=0">{{trx.nomorso}} / {{trx.namapelanggan}}</div></td>
+						<td>{{trx.nomorso}}</td>
 						<td>{{trx.name}}</td>
 						<td>{{trx.ket}}</td>
 						<td class="text-center">
@@ -39,7 +32,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+			<!-- <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls> -->
 			</div>
 		</div>
 		

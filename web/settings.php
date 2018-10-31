@@ -3,7 +3,7 @@ return [
     'settings' => [
 		'debug' => false,
 		'determineRouteBeforeAppMiddleware' => false,
-        'displayErrorDetails' => true, // set to false in production
+        'displayErrorDetails' => false, // set to false in production
         'addContentLengthHeader' => false, // Allow the web server to send the content-length header
 		'db' => [
             'driver' => 'mysql',
@@ -14,6 +14,7 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
+            'strict' => false,
         ]
     ],
 ];
