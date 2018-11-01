@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <header data-ng-include src="'pages/header.html'" onload=""></header>
+=======
+<header ng-include src="'pages/header.html'"></header>
+>>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 	
 	<div class="container-fluid">
 	  <div class="starter-template">
@@ -13,14 +17,22 @@
 		</div>
 		<div class="panel-body">
 		
+<<<<<<< HEAD
 			<form ng-hide="userLevel>1 && userLevel!=10" ng-submit="newOrder(addItem)" role="form">
+=======
+			<form ng-hide="userLevel>=1 && userLevel!=10" ng-submit="newOrder(addItem)" role="form">
+>>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 			  <div class="form-group">
 				  <div class="row">
 					<div class="col-md-3 col-xs-3">
 						<label>Nama Pelanggan</label>
 						<input list="pelanggan" type="text" ng-change="searchNama()" ng-click="selectedUser(addItem.nama)" ng-model="addItem.nama" class="form-control" required/>
 						<datalist id="pelanggan"><select id="selectUser" class="form-control">
+<<<<<<< HEAD
 							<option data-ng-repeat="item in userMemoList track by $index" value="{{item.namacustomer}}" data-id="{{$index}}">{{item.namacustomer}}</option>
+=======
+							<option data-ng-repeat="item in userMemoList track by $index" value="{{item.namacustomer}}" data-id="{{$index}}">{{item.namacustomer}} - <span class="text-right">{{item.hp}}</span></option>
+>>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 						</select></datalist>
 
 						<!-- {{addItem.nama | json}} -->
@@ -82,7 +94,11 @@
 			  
 			  <div class="form-group text-right">
 				<input type="hidden" ng-model="addItem.opr" ng-init="addItem.opr=userId" ng-value="{{userId}}">
+<<<<<<< HEAD
 				<button type="button" ng-click="reset()" class="btn btn-info" disabled>Add Item</button>
+=======
+				<button type="button" ng-click="reset()" class="btn btn-info" ng-disabled="disubmit==0">Tambah Item</button>
+>>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 				<button type="submit" class="btn btn-primary">Save Order</button>
 			  </div>			  			  
 			  <hr>
@@ -110,7 +126,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-class="{'warning': dtime(order.orderdeadline) == 1, 'yellow': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3, 'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrder|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
+					<tr ng-class="{'warning': dtime(order.orderdeadline) == 1, 'yellow': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3, 'danger': dtime(order.orderdeadline) <= 0}" dir-paginate="order in listOrder|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
 					<!-- <tr ng-repeat="order in listOrder"> -->
 						<th scope="row">{{formatDate(order.orderdate) | date:"dd-MM-yyyy HH:mm"}}</th>
 						<td>{{order.nomorso}}</td>
@@ -181,7 +197,11 @@
 	</script>  -->
 
 	<script type="text/javascript">
+<<<<<<< HEAD
 	$.noConflict();
+=======
+	//$.noConflict();
+>>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 	jQuery( document ).ready(function( $ ) {
 
 		var on = false;
@@ -204,7 +224,11 @@
 					}					
 				});
             }
+<<<<<<< HEAD
         }, 2000);
+=======
+        }, 1000);
+>>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 		
 		/*$("input#search-nama").on('change', function() {
 			$("#pelanggan").html( '<option><option>' );

@@ -92,7 +92,11 @@ $app->post('/addOrder[/]', function ($request, $response, $args) {
 	$result = array();
 	if($pxmyorder == 0){
 		
+<<<<<<< HEAD
 		$ddtime = date("H:i:s", strtotime($paramData['ddtime']));
+=======
+		// $ddtime = date("H:i:s", strtotime($paramData['ddtime']));
+>>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 		$orderdeadline = $paramData['ddline'];
 		// $orderdate = $paramData['tglorder'] . " " . date("H:i:s");
 	
@@ -213,7 +217,12 @@ $app->post('/listOrder[/]', function ($request, $response, $args) {
 	if(!empty($paramData['status'])){
 		$qry .= " where orderstatus = '".ucwords($paramData['status'])."'";
 	} else{
+<<<<<<< HEAD
 		$qry .= " where orderstatus !=8 and MONTH(orderdate) = '".date('m')."'";
+=======
+		// $qry .= " where orderstatus !=8 and MONTH(orderdate) = '".date('m')."'";
+		$qry .= " where orderstatus !=8";
+>>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 	}
 	
 	$qry .= " order by orderid desc";
@@ -468,7 +477,11 @@ $app->get('/listCustomers[/]', function ($request, $response, $args) {
 			->havingRaw("COUNT(namacustomer)>0") 
 			->orderBy('idcust', 'DESC')->get();*/
 
+<<<<<<< HEAD
 		$qry = "select * from wp0e_pxmycustomer where namacustomer LIKE '%".$terms."%' HAVING COUNT(namacustomer) > 0 order by idcust desc";
+=======
+		$qry = "select * from wp0e_pxmycustomer where namacustomer LIKE '%".$terms."%' order by idcust desc";
+>>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 		$result = DB::select(DB::raw($qry));
 
 		return $response->withStatus(200)

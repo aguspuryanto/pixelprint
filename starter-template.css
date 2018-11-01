@@ -82,8 +82,10 @@ th {
 tr.success { background-color: #33FF66 !important; }
 tr.yellow { background-color: #FFFF66 !important; }
 tr.warning { background-color: #FF9900 !important; }
-tr.danger { background-color: #FF3300 !important; }
 tr.dark-red { background-color: #CC0000 !important; } */
+
+/* tr.danger { background-color: #ec268f !important; } */
+tr.danger { background-color: #00a859 !important; }
 
 @media (max-width: 767px) {
     .container {
