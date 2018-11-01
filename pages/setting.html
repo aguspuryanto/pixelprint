@@ -3,7 +3,7 @@
 	<div class="container-fluid">
 	  <div class="starter-template">
 		
-		<div class="col-md-6">
+		<div class="col-md-5">
 			<div class="panel panel-default">
 				<div class="panel-heading clearfix">
 					<h3 class="panel-title pull-left">Tambah Status Order</h3>
@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		
-		<div class="col-md-6">
+		<div class="col-md-7">
 			<div class="panel panel-default">
 				<div class="panel-heading clearfix">
 					<h3 class="panel-title pull-left">Tambah Level User</h3>
@@ -42,6 +42,7 @@
 						<div class="form-group">
 							<label>Level</label>
 							<select ng-model="addlevelId" class="form-control">
+								<option value="0">0</option>
 								<option value="1">1</option>
 								<option value="2">2</option>
 								<option value="3">3</option>
@@ -51,9 +52,10 @@
 								<option value="7">7</option>
 								<option value="8">8</option>
 								<option value="9">9</option>
+								<option value="10">10</option>
 							</select>
 						</div>
-						<button type="submit" class="btn btn-primary">Add Level User</button>
+						<button type="submit" class="btn btn-primary">Simpan</button>
 					</form>
 					
 					<ul class="list-group" ng-init="getuserRole()">

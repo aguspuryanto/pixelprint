@@ -10,10 +10,11 @@ return [
             'host' => 'localhost',
             'database' => 'pixelprint',
             'username' => 'root',
-            'password' => '103Wonokromo',
+            'password' => '103Wonokromo##',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
+            'strict' => false,
         ]
     ],
 ];
