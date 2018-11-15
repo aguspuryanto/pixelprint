@@ -1,0 +1,119 @@
+		<!-- Navigation -->
+        <nav ng-if="userLevel" id="{{randomId}}" ng-include src="'gh-pages/pages/top_nav.html'" class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0"></nav>
+		
+		<div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-6">
+					
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title"><i class="fa fa-inbox"></i> KIRIM SMS</h3>
+							</div>
+							
+							<div class="panel-body">
+								<div id="idForm_result"></div>
+								<form name="smsSender" class="form form-vertical" ng-submit="smsSender.$valid && newSms(addItem)" novalidate role="form">						   
+									<div class="control-group">
+										<label>No Tujuan</label>
+										<div class="input-group">
+											<input id="autocomplete" type="text" ng-model="addItem.notujuan" class="form-control" ng-value="">
+											<!-- <div ng-show="smsSender.$submitted || form.mNomor.$touched">
+											  <div ng-show="smsSender.mNomor.$error.required">No Tujuan Kosong!</div>
+											</div> -->
+											<span class="input-group-addon"><a data-toggle="modal" data-target="#myModal" href="" class="modal-link"><i class="fa fa-group"></i></a></span>
+										</div>
+									</div>      
+									
+									<div class="control-group">
+										<label>Message</label>
+										<div class="controls">
+											<textarea id="send_pesan" ng-model="addItem.pesan" class="form-control" rows="5"></textarea>
+											<span id="count" class="pull-right"></span>
+										</div>
+									</div> 
+										 
+									<div class="control-group">
+										<label>Group</label>
+										<div class="controls">
+											<select ng-model="addItem.group" name="send_group" ng-options="option.Name for option in phonegroup track by option.ID" class="form-control">
+												<option value="">None</option>
+												<?php
+												/*foreach($group as $groupid){
+													echo '<option value="'.$groupid['ID'].'"';
+													if($plh_group==$groupid['ID']) echo 'selected';
+													echo '>'.$groupid['Name'].'</option>';
+												}*/
+												?>	
+											</select>
+										</div>
+									</div>    
+									
+									<div class="control-group">
+										<label></label>
+										<div class="controls">
+											<button type="submit" name="proses" class="btn btn-primary"><i class="fa fa-fw fa-paper-plane"></i> Kirim SMS </button>
+										</div>
+									</div>									
+								</form>
+								
+							</div>
+						</div>
+				</div>
+				
+	  		</div>
+		</div>
+		
+		<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Daftar PhoneBook</h4>
+					</div>
+					<div class="modal-body clearfix">
+						
+						<form class="contact">
+						<table class="table table-bordered table-hover table-striped">
+							<thead>
+								<th><div align="center"><input class="check_all" name="check_all" type="checkbox"></div></th>
+								<th>Nama</th>
+								<th>Nomer</th>
+							</thead>
+							<tbody>
+								<tr ng-repeat="pb in phonebook track by $index">
+									<td align="center">
+										<input type="checkbox" class="checkbox_phbook" name="checkbox_phbook[]" ng-value="{{pb.Number}}">
+									</td>
+									<td>{{pb.Name}}</td>
+									<td>{{pb.Number}}</td>
+								</tr>
+							</tbody>
+						</table>
+						</form>
+						
+					</div>
+					<div class="modal-footer">
+						<button id="submit" type="button" class="btn btn-primary" data-dismiss="modal">Simpan</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+		$(function() {
+			$("input[name=check_all]").click(function(){
+				$('input:checkbox').not(this).prop('checked', this.checked);
+			});
+			
+			$("button#submit").click(function(){
+				var checkedInputs = $("input.checkbox_phbook:checked");
+				var test = "";
+				$.each(checkedInputs, function(i, val) {
+					test += val.value+",";
+				});
+				test = test.substring(0,(test.length-1));
+				$('div.input-group input#autocomplete').val( test ).trigger('input');
+				$( "div#myModal" ).modal( "close" );
+			});
+		});
+		</script>

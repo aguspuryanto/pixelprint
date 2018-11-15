@@ -1,0 +1,65 @@
+		<!-- Navigation -->
+        <nav ng-if="userLevel" id="{{randomId}}" ng-include src="'gh-pages/pages/top_nav.html'" class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0"></nav>
+		
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+	  
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">
+							<h3 class="panel-title pull-left">My Order : <b>{{userName}}</b></h3>
+						</div>
+						<div class="panel-body panel-body-nopadding">			
+							<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Tgl</th>
+										<th ng-click="sort('nomorso')">No SO <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='nomorso'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
+										<th>Nama</th>
+										<th>Item</th>
+										<th>Jml</th>
+										<th ng-click="sort('orderdeadline')">Deadline <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='orderdeadline'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
+										<th>Keterangan</th>
+										<th ng-click="sort('oprname')">Operator <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='oprname'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
+										<th ng-click="sort('orderstatus')">Status <span class="glyphicon sort-icon pull-right" ng-show="sortKey=='orderstatus'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-class="{'warning': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3,
+				             'danger': dtime(order.orderdeadline) == 0}" dir-paginate="order in listOrders|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
+									<!-- <tr ng-repeat="order in listOrder"> -->
+										<th scope="row">{{formatDate(order.orderdate) | date:"dd-MM-yyyy HH:mm"}}</th>
+										<td>{{order.nomorso}}</td>
+										<td>{{order.namapelanggan}}</td>
+										<td>{{order.orderitem}}</td>
+										<td>{{order.orderjml}}</td>
+										<td>
+											<div class="pull-left">{{formatDate(order.orderdeadline) | date:"yyyy-MM-dd"}}</div>
+											<div class="notif pull-right" style="padding-top:8px">
+												<span class="label label-default">* {{dtime(order.orderdeadline)}} x 24Jam</span>
+											</div>
+										</td>
+										<td>{{order.orderketerangan}}</td>
+										<td>{{order.oprname}}</td>
+										<th scope="row" class="text-center">
+											<span ng-hide="order.nomorso">{{order.orderstatus}}</span>
+											<div class="input-group" ng-hide="!order.nomorso">
+												<select ng-model="newOrderSelected" class="form-control" ng-options="option.status for option in statusOrder track by option.id" data-live-search="true" ng-init="newOrderSelected=statusOrder[order.orderstatus-1]"></select>
+												 <span class="input-group-btn">
+													<button ng-click="saveOrderStatus(order, newOrderSelected)" class="btn btn-primary">Simpan</button>
+												</span>
+											</div>
+										</th>
+									</tr>
+								</tbody>
+							</table>
+							<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+							</div>
+						</div>
+					
+				  	</div>
+
+	  			</div>
+	  		</div>
+		</div>

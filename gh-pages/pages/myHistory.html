@@ -1,0 +1,45 @@
+		<!-- Navigation -->
+        <nav ng-if="userLevel" id="{{randomId}}" ng-include src="'gh-pages/pages/top_nav.html'" class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0"></nav>
+		
+		<div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+	  
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">
+							<h3 class="panel-title pull-left">My Order</h3>
+						</div>
+						<div class="panel-body">
+							<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th width="17%">Tanggal History</th>
+										<th ng-hide="params">No SO</th>
+										<th>Operator</th>
+										<th>Keterangan</th>
+										<th ng-hide="params">History</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="trx in listHistorys track by $index">
+									<!-- <tr ng-repeat="order in listOrder"> -->
+										<th scope="row">{{trx.update}}</th>
+										<td ng-hide="params">{{trx.nomorso}}</td>
+										<td>{{trx.name}}</td>
+										<td>{{trx.ket}}</td>
+										<td ng-hide="params" class="text-center">
+											<a class="btn btn-primary" href="#/myhistory/{{trx.orderid | slugify}}">Lihat History</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<!-- <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls> -->
+							</div>
+						</div>
+					
+				  	</div>
+
+	  			</div>
+	  		</div>
+		</div>

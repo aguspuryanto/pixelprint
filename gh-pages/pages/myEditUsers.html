@@ -1,0 +1,59 @@
+		<!-- Navigation -->
+        <nav ng-if="userLevel" id="{{randomId}}" ng-include src="'gh-pages/pages/top_nav.html'" class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0"></nav>
+		
+		<div id="page-wrapper">
+            <div class="row">
+		
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">
+							<h3 class="panel-title pull-left">My Users</h3>
+						</div>
+						<div class="panel-body">
+							<form class="" ng-submit="updateUser(user)" role="form">
+								<div class="form-group">
+									<label>Nama</label>
+									<input type="text" ng-model="user.display_name" class="form-control" required>
+								</div>
+								<div class="form-group">
+									<label>Email address:</label>
+									<input type="email" ng-model="user.email" class="form-control" required>
+								</div>
+								<div class="form-group">
+									<label>Password:</label>
+									<input type="password" ng-model="user.password" class="form-control" required>
+								</div>
+								<div class="form-group">
+									<label>Level</label>
+									<select ng-model="user.level" class="form-control" required>
+										<option value="10" ng-selected="user.level==10">Administrator</option>
+										<option value="3" ng-selected="user.level==3">Kasir</option>
+										<option value="1" ng-selected="user.level==1">Design</option>
+										<option value="0" ng-selected="user.level==0">Operator</option>
+									</select>
+								</div>
+									
+								<div class="form-group text-right">
+									<!-- <input type="text" ng-model="user.userid" style="display:none"> -->
+									<button type="submit" class="btn btn-primary">Update Profile</button>
+								</div>
+							</form>
+							
+						</div>
+					
+				  	</div> <!-- end panel -->
+			  	</div>
+			  
+			 	<div class="col-md-8">
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">
+							<h3 class="panel-title pull-left">My Users</h3>
+						</div>
+						<div class="panel-body">
+						
+						</div>
+					</div>
+			  	</div>
+			  	
+	  		</div>
+		</div>

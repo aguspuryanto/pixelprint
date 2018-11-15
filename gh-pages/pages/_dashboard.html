@@ -1,0 +1,230 @@
+		<!-- Navigation -->
+        <nav ng-if="userLevel" id="{{randomId}}" ng-include src="'gh-pages/pages/top_nav.html'" class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0"></nav>
+		
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form ng-hide="userLevel>1 && userLevel==3" ng-submit="newOrder(addItem)" role="form">
+                      <div class="form-group">
+                          <div class="row">
+                            <div class="col-md-3 col-xs-3">
+                                <label>Nama Pelanggan</label>
+                                <input list="pelanggan" type="text" ng-change="searchNama()" ng-click="selectedUser(addItem.nama)" ng-model="addItem.nama" class="form-control" required/>
+                                <datalist id="pelanggan"><select id="selectUser" class="form-control">
+                                    <option data-ng-repeat="item in userMemoList track by $index" value="{{item.namacustomer}}" data-id="{{$index}}">{{item.namacustomer}} - <span class="text-right">{{item.hp}}</span></option>
+                                </select></datalist>
+
+                                <!-- {{addItem.nama | json}} -->
+                            </div>
+                            <div class="col-md-2 col-xs-2">
+                                <label>No Handphone</label>
+                                <input type="number" ng-model="addItem.mobile" class="form-control" required/>
+                            </div>
+                            <div class="col-md-3 col-xs-3">
+                                <label>Email</label>
+                                <input type="email" ng-model="addItem.email" class="form-control" required/>
+                            </div>
+                            <div class="col-md-4 col-xs-4">
+                                <label>Alamat</label>
+                                <input type="text" ng-model="addItem.alamat" class="form-control"/>
+                                <!-- <div id="dashb" class="input-group">
+                                    <input type="text" class="form-control" ng-model="addItem.tglorder" datepicker/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div> -->
+                            </div>
+                          </div>
+                      </div>
+                      
+                      <div id="itemList" class="form-group">
+                          <div ng-repeat="order in myOrder" class="row">
+                            <div class="col-md-4 col-xs-4">
+                                <label>Item</label>
+                                <input list="orderItem" type="text" ng-model="addItem.item" class="form-control" required/>
+                                <datalist id="orderItem" ng-init="getOrderItem()">
+                                    <select class="form-control">
+                                        <option data-ng-repeat="il in itemList" value="{{il.orderitem}}">{{il.orderitem}}</option>
+                                    </select>
+                                </datalist>
+                            </div>
+                            <div class="col-md-2 col-xs-2">
+                                <label>Jumlah</label>
+                                <input type="number" ng-model="addItem.jml" class="form-control" placeholder="" required/>
+                            </div>
+                            <div class="col-md-2 col-xs-2">
+                                <label>Deadline</label>
+                                <input type="text" class="form-control" ng-model="addItem.ddline" datepicker required/>
+                                <!-- <div id="dashb" class="input-group">
+                                    <input type="text" class="form-control form_datetime" ng-model="addItem.ddline" datepicker/>
+                                    <span class="input-group-btn" style="width:0px;"></span>
+                                    <input type="time" class="form-control" ng-model="addItem.ddtime" timepicker/> -->
+                                    <!-- <span class="input-group-btn hidden-xs">
+                                        <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span> -->
+                                <!-- </div> -->
+                            </div>
+                            <div class="col-md-4 col-xs-4">
+                                <label>Keterangan</label>
+                                <input type="text" ng-model="addItem.ket" class="form-control" required/>
+                            </div>
+                          </div>
+                      </div>
+                      
+                      <div class="form-group text-right">
+                        <input type="hidden" ng-model="addItem.opr" ng-init="addItem.opr=userId" ng-value="{{userId}}">
+                        <button type="button" ng-click="reset()" class="btn btn-info" ng-disabled="disubmit==0">Tambah Item</button>
+                        <button type="submit" class="btn btn-primary">Save Order</button>
+                      </div>                          
+                      <hr>
+                    </form>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row hide">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-comments fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">26</div>
+                                    <div>New Comments!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">12</div>
+                                    <div>New Tasks!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-shopping-cart fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">124</div>
+                                    <div>New Orders!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">13</div>
+                                    <div>Support Tickets!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label>Search</label>
+                                <input type="text" ng-model="search" class="form-control" placeholder="Search">
+                            </div>
+                        </form>
+                        <table id="mycart_table" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th width="17%">Tanggal Order</th>
+                                    <th>No SO</th>
+                                    <th>Nama</th>
+                                    <th>Item</th>
+                                    <th>Jml</th>
+                                    <th width="20%">Deadline</th>
+                                    <th>Keterangan</th>
+                                    <th>Status Order</th>
+                                    <th>Operator</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-class="{'warning': dtime(order.orderdeadline) == 1, 'yellow': dtime(order.orderdeadline) == 2 , 'success': dtime(order.orderdeadline) >= 3, 'danger': dtime(order.orderdeadline) <= 0}" dir-paginate="order in listOrder|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
+                                <!-- <tr ng-repeat="order in listOrder"> -->
+                                    <th scope="row">{{formatDate(order.orderdate) | date:"dd-MM-yyyy HH:mm"}}</th>
+                                    <td>{{order.nomorso}}</td>
+                                    <td>{{order.namapelanggan}}</td>
+                                    <td>{{order.orderitem}}</td>
+                                    <td>{{order.orderjml}}</td>
+                                    <td>
+                                        <div class="pull-left">{{formatDate(order.orderdeadline) | date:"dd-MM-yyyy"}}</div>
+                                        <div class="notif pull-right" style="padding-top:8px">
+                                            <span class="label label-default">* {{dtime(order.orderdeadline)}} x 24Jam</span>
+                                        </div>
+                                    </td>
+                                    <td>{{order.orderketerangan}}</td>
+                                    <td class="text-center">
+                                        <a href="#/myorder/{{order.orderstatus | slugify}}">{{order.ordstatus}}</a>
+                                        <!-- <select class="form-control" ng-options="option.name for option in statusOrder"></select> -->
+                                    </td>
+                                    <td>{{order.oprname}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+                    </div>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->

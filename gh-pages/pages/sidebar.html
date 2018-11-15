@@ -1,0 +1,70 @@
+
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <h4>{{userName}}</h4>
+                            <p>userLeval: {{userLevel}}</p>
+                        </li>
+                        <li ng-hide="userLevel==3">
+                            <a href="#/dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li ng-show="userLevel==3">
+                            <a href="#/myorder"><i class="fa fa-table fa-fw"></i> Order</a>
+                        </li>
+                        <li ng-hide="userLevel!=10">
+                            <a href="#/mycustomer"><i class="fa fa-edit fa-fw"></i> Customer</a>
+                        </li>
+                        <li ng-hide="userLevel!=10">
+                            <a href="#/myhistory"><i class="fa fa-edit fa-fw"></i> History</a>
+                        </li>
+                        <li ng-hide="userLevel!=10" data-toggle="collapse" data-target="#email_campaign" class="collapsed">
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> Email Campaign<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse" id="email_campaign">
+                                <li>
+                                    <a href="">Campaign</a>
+                                </li>
+                                <li>
+                                    <a href="">Campaign Template</a>
+                                </li>
+                                <li>
+                                    <a href="">Campaign Subscriber</a>
+                                </li>
+                                <li>
+                                    <a href="#/liburNas">Hari Libur Nasional</a>
+                                </li>
+                                <!-- <li>
+                                    <a href="">Hari Libur Agama</a>
+                                </li> -->
+                            </ul>
+                        </li>
+                        <li ng-hide="userLevel!=10" data-toggle="collapse" data-target="#sms_campaign" class="collapsed">
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> SMS Campaign<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse" id="sms_campaign">
+                                <li>
+                                    <a href="#/smssend">Kirim SMS</a>
+                                </li>
+								<li>
+                                    <a href="#/smsinbox">Inbox</a>
+                                </li>
+                                <li>
+                                    <a href="#/smsoutbox">Outbox</a>
+                                </li>
+                                <li>
+                                    <a href="#/smsphonebook">Phone Book</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- <li data-toggle="collapse" data-target="#setting" class="collapsed">
+                            <a href=""><i class="fa fa-bar-chart-o fa-fw"></i> Setting<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse" id="setting">
+                                <li>
+                                    <a href="#/myusers">myUser</a>
+                                </li>
+                                <li>
+                                    <a href="#/setting">Setting</a>
+                                </li>
+                            </ul>
+                        </li> -->
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->

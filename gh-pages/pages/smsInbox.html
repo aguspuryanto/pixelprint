@@ -1,0 +1,40 @@
+		<!-- Navigation -->
+        <nav ng-if="userLevel" id="{{randomId}}" ng-include src="'gh-pages/pages/top_nav.html'" class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0"></nav>
+		
+		<div id="page-wrapper">
+            <div class="row">
+				
+                <div class="col-lg-12">
+	  
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">
+							<h3 class="panel-title pull-left">SMS Inbox</h3>
+						</div>
+						<div class="panel-body panel-body-nopadding">
+							<div class="table-responsive">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th width="17%">Tanggal</th>
+										<th>Nomer</th>
+										<th>Keterangan</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!-- <tr ng-repeat="trx in inbox track by $index"> -->
+									<tr dir-paginate="trx in inbox|orderBy:sortKey:reverse|filter:search|itemsPerPage:15">
+										<th scope="row">{{trx.ReceivingDateTime}}</th>
+										<td>{{trx.SenderNumber}}</td>
+										<td>{{trx.TextDecoded}}</td>
+									</tr>
+								</tbody>
+							</table>
+							<dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+							</div>
+						</div>
+					
+				  	</div>
+
+	  			</div>
+	  		</div>
+		</div>
