@@ -1,7 +1,13 @@
 <?php
 
+use Slim\Http\Request;
+use Slim\Http\Response;
 use Illuminate\Database\Capsule\Manager as DB;
 // use Illuminate\Database\Eloquent\Model;
+
+$app->get('/', function ($request, $response, $args) {
+	return include_once ('_index.html');
+});
 
 $app->post('/login[/]', function ($request, $response, $args) {
 	
@@ -92,11 +98,7 @@ $app->post('/addOrder[/]', function ($request, $response, $args) {
 	$result = array();
 	if($pxmyorder == 0){
 		
-<<<<<<< HEAD
-		$ddtime = date("H:i:s", strtotime($paramData['ddtime']));
-=======
 		// $ddtime = date("H:i:s", strtotime($paramData['ddtime']));
->>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 		$orderdeadline = $paramData['ddline'];
 		// $orderdate = $paramData['tglorder'] . " " . date("H:i:s");
 	
@@ -151,8 +153,28 @@ $app->post('/updtOrder[/]', function ($request, $response, $args) {
 			'operator' => $paramData['user_id'],
 			'ket' => 'New StatusOrder : '.$paramData['nomorso'],
 		));
+				
 		$result["error"] = false;
         $result["msg"] = "Data Tersimpan";
+		
+		/* Send SMS
+		 * required : nohp, pesan, SendingDateTime + 3jam
+		 * sql : select a.*, b.hp, b.email from wp0e_pxmyorder a left join wp0e_pxmycustomer b on b.namacustomer=a.namapelanggan where a.nomorso LIKE '{$paramData['nomorso']}' ORDER BY a.orderdate DESC LIMIT 1
+		 */
+		 
+		$qry = "select a.*, b.hp, b.email from wp0e_pxmyorder a left join wp0e_pxmycustomer b on b.namacustomer=a.namapelanggan where a.nomorso LIKE '".$paramData['nomorso']."' ORDER BY a.orderdate DESC LIMIT 1";
+		$result2 = DB::select(DB::raw($qry));
+		if($result2['hp']){
+			$outbox = array(
+				'SendingDateTime' => date("Y-m-d H:i:s", strtotime('+3 hour')),
+				'DestinationNumber' => $result2['hp'],
+				'TextDecoded' => $paramData['pesan'],
+				'CreatorID' => 1
+			);
+			// $insertOutbox = DB::table('outbox')->insert($outbox);
+			$result["msg"] .=  json_encode($outbox) . PHP_EOL;
+			$result["msg"] .=  PHP_EOL . "SMS sedang diproses";
+		}
 	}
 	
 	return $response->withStatus(200)
@@ -217,12 +239,8 @@ $app->post('/listOrder[/]', function ($request, $response, $args) {
 	if(!empty($paramData['status'])){
 		$qry .= " where orderstatus = '".ucwords($paramData['status'])."'";
 	} else{
-<<<<<<< HEAD
-		$qry .= " where orderstatus !=8 and MONTH(orderdate) = '".date('m')."'";
-=======
 		// $qry .= " where orderstatus !=8 and MONTH(orderdate) = '".date('m')."'";
 		$qry .= " where orderstatus !=8";
->>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 	}
 	
 	$qry .= " order by orderid desc";
@@ -477,11 +495,7 @@ $app->get('/listCustomers[/]', function ($request, $response, $args) {
 			->havingRaw("COUNT(namacustomer)>0") 
 			->orderBy('idcust', 'DESC')->get();*/
 
-<<<<<<< HEAD
-		$qry = "select * from wp0e_pxmycustomer where namacustomer LIKE '%".$terms."%' HAVING COUNT(namacustomer) > 0 order by idcust desc";
-=======
 		$qry = "select * from wp0e_pxmycustomer where namacustomer LIKE '%".$terms."%' order by idcust desc";
->>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 		$result = DB::select(DB::raw($qry));
 
 		return $response->withStatus(200)
@@ -518,6 +532,105 @@ $app->post('/listHistory[/]', function ($request, $response, $args) {
         ->write(json_encode($result));
 });
 
+$app->get('/smsInbox[/]', function ($request, $response, $args) {
+	
+	$tokenAuth = $request->getHeader('Authorization');
+	if($tokenAuth){
+		// $result = DB::table("inbox")->orderBy('ID', 'ASC')->get();
+		$qry = "select a.*,b.Name from inbox a left join pbk b ON b.number=a.SenderNumber ORDER BY a.ReceivingDateTime DESC";
+		$result = DB::select(DB::raw($qry));
+		
+		return $response->withStatus(200)
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode($result));
+	}
+});
+
+$app->get('/smsOutbox[/]', function ($request, $response, $args) {
+	
+	$tokenAuth = $request->getHeader('Authorization');
+	if($tokenAuth){
+		// $result = DB::table("inbox")->orderBy('ID', 'ASC')->get();
+		$qry = "select a.*,b.Name from sentitems a left join pbk b ON b.number=a.DestinationNumber ORDER BY SendingDateTime DESC";
+		$result = DB::select(DB::raw($qry));
+		
+		return $response->withStatus(200)
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode($result));
+	}
+});
+
+$app->get('/smsInboxUser[/]', function ($request, $response, $args) {
+	
+	$tokenAuth = $request->getHeader('Authorization');
+	if($tokenAuth){
+		$qry = "select * from pbk";
+		$result = DB::select(DB::raw($qry));		
+		return $response->withStatus(200)
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode($result));
+	}	
+	
+});
+
+$app->get('/smsUserGroup[/]', function ($request, $response, $args) {
+	
+	$tokenAuth = $request->getHeader('Authorization');
+	if($tokenAuth){
+		$qry = "select * from pbk_groups";
+		$result = DB::select(DB::raw($qry));		
+		return $response->withStatus(200)
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode($result));
+	}	
+	
+});
+
+$app->post('/smsBroadcst[/]', function ($request, $response, $args) {
+	
+	$tokenAuth = $request->getHeader('Authorization');
+	if($tokenAuth){
+		// $qry = "select * from pbk_groups";
+		// $result = DB::select(DB::raw($qry));
+		
+		$paramData = $request->getParsedBody();
+		// return $response->withJson($paramData); die();
+		$notujuan = explode(",", $paramData['notujuan']);
+		if(!is_array($notujuan)){
+			$outbox = array(
+				'DestinationNumber' => $paramData['notujuan'],
+				'TextDecoded' => $paramData['pesan'],
+				'CreatorID' => 1
+			);			
+			$insertOutbox = DB::table('outbox')->insert($outbox);
+		} else{
+			
+			foreach($notujuan as $nohp){
+				$outbox = array(
+					'DestinationNumber' => $nohp,
+					'TextDecoded' => $paramData['pesan'],
+					'CreatorID' => 1
+				);			
+				$insertOutbox = DB::table('outbox')->insert($outbox);
+			}
+		}
+		
+		// $insertuserRole = DB::table('wp0e_pxusersrole')->insert($userRole);	
+		if($insertOutbox){
+			$result["error"] = false;
+			$result["msg"] = "Data Tersimpan";
+		}else{
+			$result["error"] = true;
+			$result["msg"] = "Gagal simpan data";
+		}
+	
+		return $response->withStatus(200)
+			->withHeader('Content-Type', 'application/json')
+			->write(json_encode($result));
+	}	
+	
+});
+
 function toDebug($builder){
 		
 	$sql = $builder->toSql();
@@ -527,3 +640,8 @@ function toDebug($builder){
 	}
 	return $sql;
 }
+
+/* delete from wp0e_pxmyorder where orderstatus is null or orderstatus=''
+delete from wp0e_pxmycustomer where length(hp)<10 OR hp is null;
+
+DELETE n1 FROM wp0e_pxmycustomer n1, wp0e_pxmycustomer n2 WHERE n1.idcust < n2.idcust AND n1.namacustomer = n2.namacustomer */

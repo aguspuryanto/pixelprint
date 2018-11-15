@@ -1,21 +1,17 @@
-Agar Localhost Xampp dapat di Akses di Komputer Lain
+SIMPRINT | Sistem Informasi Manajemen Digital Printing
 
-httpd.conf
+Keywords: System Informasi Digital Printing (SIDP), Digita Printing, Web Application
 
-Carilah tulisan “LoadModule vhost_alias_module modules/mod_vhost_alias.so” lalu hilangkan tanda # yang ada di depannya.
+Deskripsi: 
+adalah webApp memberikan informasi proses percetakan dari proses Design hingga Finishing, dan siap Diambil.
 
-Carilah tulisan “Include “conf/extra/httpd-vhosts.conf “ lalu hilangkan tanda # di depannya
+Fitur:
+- Add New Order
+- Deadline Order
+- History Order
+- SMS
 
-
-http-xampp.conf
-
-
-Selanjutnya ketik IP address sebelum tulisan
-
-Allow from 192.168.1.10
-Allow from 192.168.1.11
-ErrorDocument 403 /error/XAMPP_FORBIDDEN.html.var
-
-Untuk merubah agar semua computer yang terhubung dapat mengakses localhost maka rubah
-“order deny, allow dan Deny from all” menjadi “Allow from all”.
-Restart Xampp Anda.
+Role:
+- Operator
+- Cashier
+- Administrator

@@ -1,38 +1,27 @@
-<<<<<<< HEAD
-<header data-ng-include src="'pages/header.html'" onload=""></header>
-=======
-<header ng-include src="'pages/header.html'"></header>
->>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
+<header id="{{randomId}}" ng-include src="'pages/header.html'"></header>
 	
 	<div class="container-fluid">
 	  <div class="starter-template">
 	  
 		<div class="panel panel-default">
 		<div class="panel-heading clearfix">
-			<h3 class="panel-title pull-left">My Order</h3>
+			<h3 class="panel-title pull-left">My Order </h3>
+			<span class="pull-right">userLeval: {{userLevel}}</span>
 			<!-- <div class="btn-group pull-right">
 				<a ng-click="toggleModal()" class="btn btn-default"> <i class="glyphicon glyphicon-plus"></i> New Order</a>
 			</div>
 			<div class="clearfix"></div> -->
 		</div>
 		<div class="panel-body">
-		
-<<<<<<< HEAD
-			<form ng-hide="userLevel>1 && userLevel!=10" ng-submit="newOrder(addItem)" role="form">
-=======
-			<form ng-hide="userLevel>=1 && userLevel!=10" ng-submit="newOrder(addItem)" role="form">
->>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
+			
+			<form ng-hide="userLevel>1 && userLevel==3" ng-submit="newOrder(addItem)" role="form">
 			  <div class="form-group">
 				  <div class="row">
 					<div class="col-md-3 col-xs-3">
 						<label>Nama Pelanggan</label>
 						<input list="pelanggan" type="text" ng-change="searchNama()" ng-click="selectedUser(addItem.nama)" ng-model="addItem.nama" class="form-control" required/>
 						<datalist id="pelanggan"><select id="selectUser" class="form-control">
-<<<<<<< HEAD
-							<option data-ng-repeat="item in userMemoList track by $index" value="{{item.namacustomer}}" data-id="{{$index}}">{{item.namacustomer}}</option>
-=======
 							<option data-ng-repeat="item in userMemoList track by $index" value="{{item.namacustomer}}" data-id="{{$index}}">{{item.namacustomer}} - <span class="text-right">{{item.hp}}</span></option>
->>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 						</select></datalist>
 
 						<!-- {{addItem.nama | json}} -->
@@ -94,11 +83,7 @@
 			  
 			  <div class="form-group text-right">
 				<input type="hidden" ng-model="addItem.opr" ng-init="addItem.opr=userId" ng-value="{{userId}}">
-<<<<<<< HEAD
-				<button type="button" ng-click="reset()" class="btn btn-info" disabled>Add Item</button>
-=======
 				<button type="button" ng-click="reset()" class="btn btn-info" ng-disabled="disubmit==0">Tambah Item</button>
->>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 				<button type="submit" class="btn btn-primary">Save Order</button>
 			  </div>			  			  
 			  <hr>
@@ -197,11 +182,7 @@
 	</script>  -->
 
 	<script type="text/javascript">
-<<<<<<< HEAD
-	$.noConflict();
-=======
 	//$.noConflict();
->>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 	jQuery( document ).ready(function( $ ) {
 
 		var on = false;
@@ -224,11 +205,7 @@
 					}					
 				});
             }
-<<<<<<< HEAD
-        }, 2000);
-=======
         }, 1000);
->>>>>>> 24a91b0db36c4352e3b9d4214cd3fdaa56d71289
 		
 		/*$("input#search-nama").on('change', function() {
 			$("#pelanggan").html( '<option><option>' );
