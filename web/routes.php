@@ -532,6 +532,19 @@ $app->post('/listHistory[/]', function ($request, $response, $args) {
         ->write(json_encode($result));
 });
 
+$app->post('/liburNas[/]', function ($request, $response, $args) {
+	
+	$paramData = $request->getParsedBody();
+	// return $response->withJson($paramData); die();
+	
+	$qry = "select * from wp0e_pxliburnas order by id desc";	
+	$result = DB::select(DB::raw($qry));
+	
+	return $response->withStatus(200)
+        ->withHeader('Content-Type', 'application/json')
+        ->write(json_encode($result));
+});
+
 $app->get('/smsInbox[/]', function ($request, $response, $args) {
 	
 	$tokenAuth = $request->getHeader('Authorization');

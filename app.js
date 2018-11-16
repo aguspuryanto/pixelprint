@@ -60,7 +60,7 @@ myApp.config(function($routeProvider, $httpProvider) {
     .when("/liburnas", {
 		title: 'PIXEL PRINT',
         templateUrl : "gh-pages/pages/hLiburNas.html",
-		// controller: 'LiburCtrl'
+		controller: 'LiburCtrl'
     })
     .when("/smsinbox", {
 		// title: 'SMS INBOX',
@@ -283,6 +283,42 @@ myApp.controller('HistoryCtrl', function ($scope, $http, $location, $routeParams
 		orderid: $scope.params
 	}).then(function(response) {
 		$scope.listHistorys = response.data;
+	});
+	
+});
+
+myApp.controller('LiburCtrl', function ($scope, $http, $location, $routeParams) {
+	
+	$scope.params = $routeParams.param;
+	// console.log( "routeParams: " + $scope.params );
+	
+	/*$scope.liburNas = [
+		{tgl: '1 Januari', ket: 'Tahun Baru Masehi'},
+		{tgl: '5 Februari', ket: 'Tahun Baru Imlek'},
+		{tgl: '7 Maret', ket: 'Hari Raya Nyepi Tahun Baru Saka'},
+		{tgl: '3 April', ket: 'Isra Mikraj Nabi Muhammad SAW'},
+		{tgl: '19 April', ket: 'Wafat Isa Al Masih'},
+		{tgl: '1 Mei', ket: 'Hari Buruh Internasional'},
+		{tgl: '19 Mei', ket: 'Hari Raya Waisak'},
+		{tgl: '30 Mei', ket: 'Kenaikan Isa Almasih'},
+		{tgl: '1 Juni', ket: 'Hari Lahir Pancasila'},
+		{tgl: '3-4 Juni', ket: 'Cuti bersama Hari Raya Idul Fitri'},
+		{tgl: '5-6 Juni', ket: 'Hari Raya Idul Fitri'},
+		{tgl: '7 Juni', ket: 'Cuti bersama Hari Raya Idul Fitri'},
+		{tgl: '11 Agustus', ket: 'Hari Raya Idul Adha'},
+		{tgl: '17 Agustus', ket: 'Hari Raya Kemerdekaan Republik Indonesia'},
+		{tgl: '1 September', ket: 'Tahun Baru Islam'},
+		{tgl: '9 November', ket: 'Maulid Nabi Muhammad SAW'},
+		{tgl: '24 Desember', ket: 'Cuti bersama Hari Raya Natal'},
+		{tgl: '25 Desember', ket: 'Hari Raya Natal'},
+	];*/
+
+	$scope.liburNas = [];
+	$http.post("web/liburNas/", {
+		user_id: sessionStorage.getItem('userid'),
+		orderid: $scope.params
+	}).then(function(response) {
+		$scope.liburNas = response.data;
 	});
 	
 });
